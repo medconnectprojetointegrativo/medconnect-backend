@@ -1,0 +1,5 @@
+.env
+node_modules
+/src/models/prisma
+package-lock.json
+migrations

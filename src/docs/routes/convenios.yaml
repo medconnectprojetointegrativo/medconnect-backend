@@ -1,0 +1,34 @@
+paths:
+    /convenios:
+        post:
+            summary: Cadastra uma nova operadora de convênio
+            tags: [Convênios]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Convenio'
+            responses:
+                201:
+                    description: Convênio criado com sucesso
+
+    /convenios/{id_convenio}:
+        put:
+            summary: Atualiza dados de uma operadora
+            tags: [Convênios]
+            parameters:
+                - in: path
+                  name: id_convenio
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Convenio'
+            responses:
+                201:
+                    description: Convênio atualizado com sucesso

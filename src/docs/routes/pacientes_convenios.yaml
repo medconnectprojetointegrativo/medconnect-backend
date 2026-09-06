@@ -1,0 +1,60 @@
+paths:
+    /pacientes/{id_paciente}/convenios:
+        post:
+            summary: Vincula um paciente a um plano de convênio
+            tags: [Vínculos com Convênios]
+            parameters:
+                - in: path
+                  name: id_paciente
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PacienteConvenio'
+            responses:
+                201:
+                    description: Vínculo criado com sucesso
+
+    /pacientes/convenios/{id_convenio_paciente}:
+        put:
+            summary: Atualiza as informações da carteirinha e vínculo
+            tags: [Vínculos com Convênios]
+            parameters:
+                - in: path
+                  name: id_convenio_paciente
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                numero_carteirinha:
+                                    type: string
+                                data_validade:
+                                    type: string
+                                    format: date
+                                ativo:
+                                    type: boolean
+            responses:
+                201:
+                    description: Vínculo atualizado com sucesso
+        delete:
+            summary: Remove o vínculo do paciente com o convênio
+            tags: [Vínculos com Convênios]
+            parameters:
+                - in: path
+                  name: id_convenio_paciente
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: Vínculo excluído com sucesso

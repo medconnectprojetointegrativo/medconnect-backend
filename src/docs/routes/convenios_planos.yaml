@@ -1,0 +1,42 @@
+paths:
+    /convenios/planos:
+        post:
+            summary: Cadastra um plano vinculado a uma operadora
+            tags: [Planos de Convênio]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                id_convenio:
+                                    type: integer
+                                nome_plano:
+                                    type: string
+            responses:
+                201:
+                    description: Plano criado com sucesso
+
+    /convenios/planos/{id_plano_convenio}:
+        put:
+            summary: Atualiza os dados de um plano
+            tags: [Planos de Convênio]
+            parameters:
+                - in: path
+                  name: id_plano_convenio
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                nome_plano:
+                                    type: string
+            responses:
+                201:
+                    description: Plano atualizado com sucesso

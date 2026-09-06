@@ -1,0 +1,13 @@
+components:
+    schemas:
+        Usuario:
+            type: object
+            properties:
+                id_usuario:
+                    type: integer
+                login:
+                    type: string
+                email:
+                    type: string
+                funcao:
+                    type: string

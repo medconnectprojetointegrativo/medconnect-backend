@@ -1,0 +1,119 @@
+paths:
+    /usuarios/{id_usuario}:
+        get:
+            summary: Busca um usuário pelo ID
+            tags: [Usuários]
+            parameters:
+                - in: path
+                  name: id_usuario
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: Usuário retornado com sucesso
+                404:
+                    description: Usuário não encontrado
+
+        put:
+            summary: Atualiza dados de acesso do usuário
+            tags: [Usuários]
+            parameters:
+                - in: path
+                  name: id_usuario
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                senha:
+                                    type: string
+            responses:
+                201:
+                    description: Usuário atualizado com sucesso
+
+        delete:
+            summary: Exclui um usuário
+            tags: [Usuários]
+            parameters:
+                - in: path
+                  name: id_usuario
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: Usuário excluído com sucesso
+
+    /usuarios:
+        get:
+            summary: Lista todos os usuários
+            tags: [Usuários]
+            responses:
+                200:
+                    description: Usuários retornados com sucesso
+
+    /usuarios/paciente:
+        post:
+            summary: Cria um usuário e o vincula a um perfil de paciente
+            tags: [Usuários]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                login:
+                                    type: string
+                                email:
+                                    type: string
+                                senha:
+                                    type: string
+                                nome:
+                                    type: string
+                                sobrenome:
+                                    type: string
+                                data_nascimento:
+                                    type: string
+                                    format: date
+                                numero_contato:
+                                    type: string
+            responses:
+                201:
+                    description: Usuário e perfil criados com sucesso
+
+    /usuarios/profissional:
+        post:
+            summary: Cria um usuário e o vincula a um perfil profissional
+            tags: [Usuários]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                login:
+                                    type: string
+                                email:
+                                    type: string
+                                senha:
+                                    type: string
+                                nome:
+                                    type: string
+                                sobrenome:
+                                    type: string
+                                data_nascimento:
+                                    type: string
+                                    format: date
+            responses:
+                201:
+                    description: Usuário e perfil criados com sucesso

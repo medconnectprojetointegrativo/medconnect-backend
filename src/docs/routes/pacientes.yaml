@@ -1,0 +1,74 @@
+paths:
+    /pacientes:
+        get:
+            summary: Lista todos os pacientes
+            tags: [Pacientes]
+            responses:
+                200:
+                    description: Pacientes retornados com sucesso
+        post:
+            summary: Cria um novo paciente isolado
+            tags: [Pacientes]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Paciente'
+            responses:
+                201:
+                    description: Paciente criado com sucesso
+
+    /pacientes/{id_paciente}:
+        get:
+            summary: Busca detalhes completos de um paciente
+            tags: [Pacientes]
+            parameters:
+                - in: path
+                  name: id_paciente
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: Paciente retornado com sucesso
+        put:
+            summary: Atualiza dados cadastrais do paciente
+            tags: [Pacientes]
+            parameters:
+                - in: path
+                  name: id_paciente
+                  required: true
+                  schema:
+                      type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                nome:
+                                    type: string
+                                sobrenome:
+                                    type: string
+                                data_nascimento:
+                                    type: string
+                                    format: date
+                                numero_contato:
+                                    type: string
+            responses:
+                201:
+                    description: Paciente atualizado com sucesso
+        delete:
+            summary: Exclui um paciente
+            tags: [Pacientes]
+            parameters:
+                - in: path
+                  name: id_paciente
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: Paciente e dependências excluídos com sucesso

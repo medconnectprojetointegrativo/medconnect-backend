@@ -1,0 +1,75 @@
+model Paciente {
+  id_paciente     Int       @id @default(autoincrement())
+  id_usuario      Int?
+  nome            String    @db.VarChar(70)
+  sobrenome       String    @db.VarChar(70)
+  cpf             String    @unique @db.Char(11)
+  data_nascimento DateTime? @db.Date
+  numero_contato  String?   @db.Char(11)
+
+  usuario         Usuario?  @relation(fields: [id_usuario], references: [id_usuario])
+  
+  // Relacionamentos e dependências
+  documentos      PacienteDocumentacaoPessoal[]
+  convenios       PacienteConvenio[]            @relation("PacienteConvenioTitular")
+  conveniosUso    PacienteConvenio[]            @relation("PacienteConvenioUso")
+  procedimentos   Procedimento[]
+  vacinacoes      PacienteVacinacao[]
+
+  @@map("pacientes")
+  @@index([cpf])
+}
+
+model PacienteDocumentacaoPessoal {
+  id_documento_paciente Int      @id @default(autoincrement())
+  id_paciente           Int?
+  tipo_documento        String?  @db.VarChar(50)
+  numero_documento      String?  @db.VarChar(20)
+  orgao_emissor         String?  @db.VarChar(50)
+  data_emissao          DateTime? @db.Date
+  data_validade         DateTime @db.Date
+
+  paciente              Paciente? @relation(fields: [id_paciente], references: [id_paciente])
+
+  @@map("pacientes_documentacoes_pessoais")
+}
+
+model Convenio {
+  id_convenio    Int       @id @default(autoincrement())
+  nome_operadora String?   @db.VarChar(50)
+  registro_ans   String?   @db.Char(6)
+  ativo          Boolean?  @default(true)
+
+  planos         ConvenioPlano[]
+
+  @@map("convenios")
+}
+
+model ConvenioPlano {
+  id_plano_convenio Int       @id @default(autoincrement())
+  id_convenio       Int?
+  nome_plano        String?   @db.VarChar(100)
+
+  convenio          Convenio? @relation(fields: [id_convenio], references: [id_convenio])
+  pacientes         PacienteConvenio[]
+
+  @@map("convenios_planos")
+}
+
+model PacienteConvenio {
+  id_convenio_paciente Int       @id @default(autoincrement())
+  id_paciente          Int?
+  id_plano             Int?
+  numero_carteirinha   String?   @db.VarChar(30)
+  data_validade        DateTime? @db.Date
+  id_paciente_titular  Int?
+  ativo                Boolean?  @default(true)
+
+  paciente             Paciente?      @relation("PacienteConvenioUso", fields: [id_paciente], references: [id_paciente])
+  pacienteTitular      Paciente?      @relation("PacienteConvenioTitular", fields: [id_paciente_titular], references: [id_paciente])
+  plano                ConvenioPlano? @relation(fields: [id_plano], references: [id_plano_convenio])
+  
+  pagamentos           ProcedimentoPagamento[]
+
+  @@map("pacientes_convenios")
+}

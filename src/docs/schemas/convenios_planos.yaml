@@ -1,0 +1,11 @@
+components:
+    schemas:
+        ConvenioPlano:
+            type: object
+            properties:
+                id_plano_convenio:
+                    type: integer
+                id_convenio:
+                    type: integer
+                nome_plano:
+                    type: string

@@ -1,0 +1,21 @@
+components:
+    schemas:
+        PacienteConvenio:
+            type: object
+            properties:
+                id_convenio_paciente:
+                    type: integer
+                id_paciente:
+                    type: integer
+                id_plano:
+                    type: integer
+                numero_carteirinha:
+                    type: string
+                data_validade:
+                    type: string
+                    format: date
+                id_paciente_titular:
+                    type: integer
+                    nullable: true
+                ativo:
+                    type: boolean

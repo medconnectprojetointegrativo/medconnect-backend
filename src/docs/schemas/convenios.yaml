@@ -1,0 +1,13 @@
+components:
+    schemas:
+        Convenio:
+            type: object
+            properties:
+                id_convenio:
+                    type: integer
+                nome_operadora:
+                    type: string
+                registro_ans:
+                    type: string
+                ativo:
+                    type: boolean

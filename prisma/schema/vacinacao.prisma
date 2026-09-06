@@ -1,0 +1,49 @@
+model Vacina {
+  id_vacina         Int      @id @default(autoincrement())
+  nome              String?  @db.VarChar(100)
+  sigla_codigo      String?  @db.VarChar(30)
+  fabricante        String?  @db.VarChar(100)
+  codigo_tuss_sipni String?  @db.VarChar(30)
+  tipo_imunizante   String?  @db.VarChar(50)
+  ativo             Boolean? @default(true)
+
+  esquemas_doses    VacinaDoseEsquema[]
+  vacinacoes        PacienteVacinacao[]
+
+  @@map("vacinas")
+}
+
+model VacinaDoseEsquema {
+  id_esquema            Int     @id
+  id_vacina             Int?
+  identificador_dose    String? @db.VarChar(20)
+  idade_recomendada_meses Int?
+  intervalo_minimo_dias Int?
+
+  vacina                Vacina? @relation(fields: [id_vacina], references: [id_vacina])
+
+  @@map("vacinas_doses_esquema")
+}
+
+model PacienteVacinacao {
+  id_vacinacao               Int       @id @default(autoincrement())
+  id_paciente                Int?
+  id_vacina                  Int?
+  id_local                   Int?
+  id_profissional            Int?
+  dose_aplicada              String?   @db.VarChar(20)
+  data_aplicacao             DateTime? @db.Date
+  data_previsao_proxima_dose DateTime? @db.Date
+  lote                       String?   @db.VarChar(30)
+  data_validade_lote         DateTime? @db.Date
+  status                     String?   @db.VarChar(20)
+  origem_registro            String?   @db.VarChar(30)
+  observacoes                String?   @db.VarChar(300)
+
+  paciente                   Paciente?     @relation(fields: [id_paciente], references: [id_paciente])
+  vacina                     Vacina?       @relation(fields: [id_vacina], references: [id_vacina])
+  local                      Local?        @relation(fields: [id_local], references: [id_local])
+  profissional               Profissional? @relation(fields: [id_profissional], references: [id_profissional])
+
+  @@map("pacientes_vacinacoes")
+}

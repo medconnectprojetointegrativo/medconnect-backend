@@ -1,0 +1,19 @@
+components:
+    schemas:
+        PacienteDocumentos:
+            type: object
+            properties:
+                id_documento_paciente:
+                    type: integer
+                tipo_documento:
+                    type: string
+                numero_documento:
+                    type: string
+                orgao_emissor:
+                    type: string
+                data_emissao:
+                    type: string
+                    format: date
+                data_validade:
+                    type: string
+                    format: date
