@@ -26,3 +26,6 @@ exports.notFound = (res, message) =>
 
 exports.serverError = (res, message = 'Erro interno do servidor.') =>
     sendResponse(res, 500, 'INTERNAL SERVER ERROR', message);
+
+exports.forbidden = (res, message = 'Acesso restrito.') =>
+    sendResponse(res, 403, 'FORBIDDEN', message);

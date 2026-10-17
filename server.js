@@ -7,19 +7,37 @@ const prisma = require('./src/config/prismaClient.js');
 
 async function startServer() {
     try {
-        logger.info("💻️ MedConnect - Back-End 🖥️");
+        logger.info("MedConnect - Back-End");
 
         await prisma.$connect();
-        logger.info("✅ Prisma conectado ao banco de dados com sucesso! ✅ ");
 
-        app.listen(process.env.BACKEND_PORT, logger.info(`✅ Servidor online! Back-end disponível na porta: ${process.env.BACKEND_PORT} ✅`));
+        await prisma.$queryRaw`SELECT 1`;
+
+        logger.info("Prisma conectado ao banco de dados com sucesso!");
+
+        const port = process.env.BACKEND_PORT || 3000;
+
+        app.listen(port, () => {
+            logger.info(`Servidor online! Back-end disponível na porta: ${port}`);
+
+            if (process.env.AMBIENTE === "DESENVOLVIMENTO") {
+                logger.info(`Documentação da API disponível em: http://localhost:${port}/api/docs`);
+            }
+        });
+
     } catch (error) {
-        logger.error({ error }, "🔴 Falha crítica: Prisma não conseguir conectar ao banco de dados. 🔴");
+        logger.error(
+            {
+                mensagem: error.message,
+                codigo: error.code || error.cause?.code,
+                stack: error.stack
+            },
+            "Falha crítica: Não foi possível conectar ao banco de dados."
+        );
+
+        await prisma.$disconnect().catch(() => { });
+        process.exit(1);
     }
 }
 
 startServer();
-
-// console.log(`> 📚 Verifique a documentação da API em: ${process.env.ENVIRONMENT == 'PRD' ? `${process.env.BACKEND_PRD_URL}${process.env.API_DOCUMENTATION_ROUTE}` : `${process.env.DEV_DOMAIN}:${process.env.BACKEND_PORT}${process.env.API_DOCUMENTATION_ROUTE}`}`);
-
-// console.log(`> 📚 Verifique a documentação do Banco de Dados em: ${process.env.ENVIRONMENT == 'PRD' ? `${process.env.BACKEND_PRD_URL}${process.env.DATABASE_DOCUMENTATION_ROUTE}` : `${process.env.DEV_DOMAIN}:${process.env.BACKEND_PORT}${process.env.DATABASE_DOCUMENTATION_ROUTE}`}`);

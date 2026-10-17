@@ -17,14 +17,15 @@ class UsuariosRota {
     }
 
     middlewares() {
-
+        this.autenticacaoMiddleware = require('../middlewares/autenticacaoMiddleware');
+        this.adminMiddleware = require('../middlewares/adminMiddleware');
     }
 
     // Definição de rotas
     // Rota padrão: /api/usuarios
     usuariosRota() {
         this.router.get('/:id_usuario', this.usuariosController.buscarUsuario);
-        this.router.get('/', this.usuariosController.buscarTodosUsuarios);
+        this.router.get('/', this.autenticacaoMiddleware, this.adminMiddleware, this.usuariosController.buscarTodosUsuarios);
         this.router.post('/paciente', this.usuariosController.criarUsuarioPaciente);
         this.router.post('/profissional', this.usuariosController.criarUsuarioProfissional);
         this.router.put('/:id_usuario', this.usuariosController.atualizarUsuario);
