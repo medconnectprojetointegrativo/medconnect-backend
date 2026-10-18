@@ -42,6 +42,7 @@ const rotaAutenticacao = require('./routes/AutenticacaoRota');
 const rotaUsuarios = require('./routes/UsuariosRota');
 const rotaPacientes = require('./routes/PacientesRota');
 const rotaConvenios = require('./routes/ConveniosRota');
+const rotaLocais = require('./routes/LocaisRota');
 
 // Importação de Middlewares
 const validadorJSON = require('./middlewares/validadorJSON');
@@ -62,6 +63,7 @@ class App {
         }));
         this.application.use(limiter);
         this.application.use(validadorJSON);
+        this.application.use('/files', express.static(path.resolve(__dirname, '..', 'files')));
     }
 
     routes() {
@@ -73,6 +75,7 @@ class App {
         apiRouter.use('/usuarios', rotaUsuarios);
         apiRouter.use('/pacientes', rotaPacientes);
         apiRouter.use('/convenios', rotaConvenios);
+        apiRouter.use('/locais', rotaLocais);
 
         this.application.use('/api', apiRouter);
     }
