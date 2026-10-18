@@ -36,7 +36,7 @@ class LocaisRota {
     // Rota padrão: /api/locais
     locaisRota() {
         this.router.get('/:id_local', this.locaisController.buscarLocal);
-        //this.router.get('/', this.locaisController.buscarTodosLocais);
+        this.router.get('/', this.locaisController.buscarTodosLocais);
         this.router.post('/', this.locaisController.cadastrarLocal);
         this.router.put('/:id_local', this.locaisController.atualizarLocal);
         this.router.delete('/:id_local', this.locaisController.excluirLocal);
@@ -80,6 +80,7 @@ class LocaisRota {
         this.router.post('/avaliacoes', this.locaisAvaliacoesController.cadastrarAvaliacao);
         this.router.put('/avaliacoes/:id_avaliacao_local', this.locaisAvaliacoesController.atualizarAvaliacao);
         this.router.delete('/avaliacoes/:id_avaliacao_local', this.locaisAvaliacoesController.excluirAvaliacao);
+        this.router.get('/:id_local/calcular-avaliacao', this.locaisAvaliacoesController.calcularMediaAvaliacoesPorLocal);
     }
 
     locaisFotosRota() {

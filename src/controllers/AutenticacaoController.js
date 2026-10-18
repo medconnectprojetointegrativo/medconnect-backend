@@ -43,6 +43,87 @@ class AutenticacaoController {
             return response.serverError(res, "Falha ao realizar login.");
         }
     }
+
+    async validarToken(req, res) {
+        try {
+            const authHeader = req.headers.authorization;
+
+            if (!authHeader) {
+                return response.unauthorized(res, "Token não fornecido.");
+            }
+
+            const parts = authHeader.split(" ");
+            if (parts.length !== 2 || parts[0] !== "Bearer") {
+                return response.unauthorized(res, "Formato do token inválido.");
+            }
+
+            const token = parts[1];
+
+            // 1. Validação da assinatura e expiração com a chave secreta
+            let decoded;
+            try {
+                decoded = jwt.verify(token, JWT_SECRET);
+            } catch (err) {
+                if (err.name === "TokenExpiredError") {
+                    return response.unauthorized(res, "Sessão expirada. Faça login novamente.");
+                }
+                return response.unauthorized(res, "Token inválido.");
+            }
+
+            // 2. Busca os dados atualizados no banco a partir do payload descriptografado/decodificado
+            const usuario = await prisma.usuario.findUnique({
+                where: { id_usuario: Number(decoded.id) },
+                select: {
+                    id_usuario: true,
+                    login: true,
+                    email: false,
+                    funcao: true,
+                    // Garante que o hash da senha nunca seja retornado
+                    senha_hash: false,
+                    pacientes: {
+                        select: {
+                            id_paciente: true,
+                        },
+                    },
+                },
+            });
+
+            if (!usuario) {
+                return response.notFound(res, "Usuário não encontrado.");
+            }
+
+            let id_paciente = null;
+            if (usuario.funcao === "PACIENTE") {
+                const paciente = await prisma.paciente.findFirst({
+                    where: { id_usuario: usuario.id_usuario },
+                    select: {
+                        id_paciente: true, id_usuario: false,
+                        documentos: false,
+                        conveniosUso: false,
+                        vacinacoes: false,
+                        procedimentos: false
+                    },
+                });
+
+                if (paciente) {
+                    id_paciente = paciente.id_paciente;
+                }
+            }
+
+            const usuarioFormatado = {
+                id_usuario: usuario.id_usuario,
+                login: usuario.login,
+                funcao: usuario.funcao,
+                id_paciente: id_paciente || null,
+            };
+
+            logger.info(`Token do usuário ${usuarioFormatado.id_usuario} validado com sucesso!`);
+            return response.success(res, "Sessão ativa e válida.", usuarioFormatado);
+        } catch (error) {
+            logger.error({ err: error }, "Erro ao executar: AutenticacaoController -> validarToken()");
+            return response.serverError(res, "Falha ao validar a sessão do usuário.");
+        }
+    }
 };
 
 module.exports = new AutenticacaoController();

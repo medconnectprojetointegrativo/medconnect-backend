@@ -35,8 +35,15 @@ class LocaisController {
             const locais = await prisma.local.findMany({
                 include: {
                     endereco: true,
-                    categoria: true
-                }
+                    categoria: true,
+                    // Filtra a relação fotos trazendo apenas tipo_foto === "LOGO"
+                    fotos: {
+                        where: {
+                            tipo_foto: "LOGO",
+                        },
+                        take: 1, // Pega apenas a primeira foto com esse tipo
+                    },
+                },
             });
 
             if (!locais || locais.length === 0) return response.notFound(res, "Locais não encontrados.");
