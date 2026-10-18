@@ -4,6 +4,7 @@ loadEnvFile();
 const app = require('./src/app.js');
 const logger = require('./src/utils/logger.js');
 const prisma = require('./src/config/prismaClient.js');
+const inicializarPastasArmazenamento = require("./src/utils/initStorage.js");
 
 async function startServer() {
     try {
@@ -14,6 +15,8 @@ async function startServer() {
         await prisma.$queryRaw`SELECT 1`;
 
         logger.info("Prisma conectado ao banco de dados com sucesso!");
+
+        inicializarPastasArmazenamento();
 
         const port = process.env.BACKEND_PORT || 3000;
 
