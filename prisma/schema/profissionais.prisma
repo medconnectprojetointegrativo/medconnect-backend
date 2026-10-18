@@ -1,57 +1,51 @@
 model ProfissionalCategoria {
-  id_categoria_profissional Int       @id @default(autoincrement())
-  categoria                 String?   @db.VarChar(50)
-
+  id_categoria_profissional Int            @id @default(autoincrement())
+  categoria                 String?        @db.VarChar(50)
   profissionais             Profissional[]
 
   @@map("profissionais_categorias")
 }
 
 model Profissional {
-  id_profissional           Int       @id @default(autoincrement())
-  id_usuario      Int?
+  id_profissional           Int                               @id @default(autoincrement())
+  id_usuario                Int?
   id_categoria_profissional Int?
-  nome                      String?   @db.VarChar(70)
-  sobrenome                 String?   @db.VarChar(70)
-  cpf                       String?   @unique @db.Char(11)
-  data_nascimento           DateTime? @db.Date
-
-  categoria                 ProfissionalCategoria? @relation(fields: [id_categoria_profissional], references: [id_categoria_profissional])
-  usuario         Usuario?  @relation(fields: [id_usuario], references: [id_usuario])
-  
-  // Relacionamentos inversos
+  nome                      String?                           @db.VarChar(70)
+  sobrenome                 String?                           @db.VarChar(70)
+  cpf                       String?                           @unique @db.Char(11)
+  data_nascimento           DateTime?                         @db.Date
+  vacinacoesAplicadas       PacienteVacinacao[]
+  procedimentos             Procedimento[]
+  categoria                 ProfissionalCategoria?            @relation(fields: [id_categoria_profissional], references: [id_categoria_profissional])
+  usuario                   Usuario?                          @relation(fields: [id_usuario], references: [id_usuario])
   documentos                ProfissionalDocumentacaoPessoal[]
   registros                 ProfissionalRegistro[]
-  procedimentos             Procedimento[]
-  vacinacoesAplicadas       PacienteVacinacao[]
 
-  @@map("profissionais")
   @@index([cpf])
+  @@map("profissionais")
 }
 
 model ProfissionalDocumentacaoPessoal {
-  id_documento_profissional Int       @id @default(autoincrement())
+  id_documento_profissional Int           @id @default(autoincrement())
   id_profissional           Int?
-  tipo_documento            String?   @db.VarChar(50)
-  numero_documento          String?   @db.VarChar(20)
-  orgao_emissor             String?   @db.VarChar(50)
-  data_emissao              DateTime? @db.Date
-  data_validade             DateTime  @db.Date
-
+  tipo_documento            String?       @db.VarChar(50)
+  numero_documento          String?       @db.VarChar(20)
+  orgao_emissor             String?       @db.VarChar(50)
+  data_emissao              DateTime?     @db.Date
+  data_validade             DateTime      @db.Date
   profissional              Profissional? @relation(fields: [id_profissional], references: [id_profissional])
 
   @@map("profissionais_documentacoes_pessoais")
 }
 
 model ProfissionalRegistro {
-  id_registro_profissional Int       @id @default(autoincrement())
+  id_registro_profissional Int           @id @default(autoincrement())
   id_profissional          Int?
-  sigla_conselho_regional  String?   @db.VarChar(10)
-  numero_registro          String?   @db.VarChar(10)
-  uf_registro              String?   @db.VarChar(2)
-  data_validade            DateTime? @db.Date
+  sigla_conselho_regional  String?       @db.VarChar(10)
+  numero_registro          String?       @db.VarChar(10)
+  uf_registro              String?       @db.VarChar(2)
+  data_validade            DateTime?     @db.Date
   ativo                    Boolean?
-
   profissional             Profissional? @relation(fields: [id_profissional], references: [id_profissional])
 
   @@map("profissionais_registros")

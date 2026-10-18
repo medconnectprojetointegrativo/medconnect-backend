@@ -1,13 +1,11 @@
 model Usuario {
-  id_usuario Int     @id @default(autoincrement())
-  login      String  @db.VarChar(11)
-  email      String  @db.VarChar(320)
-  senha_hash String  @db.VarChar(150)
-  funcao     String? @db.VarChar(30)
-
-  // Relacionamentos inversos necessários pelo Prisma
-  pacientes       Paciente[]
+  id_usuario      Int              @id @default(autoincrement())
+  login           String           @unique @db.VarChar(11)
+  email           String           @unique @db.VarChar(320)
+  senha_hash      String           @db.VarChar(150)
+  funcao          String?          @db.VarChar(30)
   avaliacoesLocal LocalAvaliacao[]
+  pacientes       Paciente[]
   profissionais   Profissional[]
 
   @@map("usuarios")

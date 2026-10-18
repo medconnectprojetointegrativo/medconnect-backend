@@ -1,0 +1,208 @@
+DOCUMENTAÇÃO INICIAL DO BACK-END MEDCONNECT
+
+# STACK
+## Linguagem
+- JavaScript com Node.js
+
+### Desenvolvimento (Core)
+- express.js: Framework minimalista para criação de servidores HTTP e APIs (gerenciamento de rotas e middlewares).
+- prisma: ORM (Object-Relational Mapping) para comunicação estruturada com o banco de dados, versionamento de tabelas e execução de queries.
+- pg (PostgreSQL): Driver nativo para comunicação de baixo nível com o banco PostgreSQL (utilizado pelo Prisma nos bastidores).
+- zod: Biblioteca de validação de schemas. Utilizada para garantir que o formato e a sintaxe dos dados recebidos na requisição estejam corretos antes de passarem para as regras de negócio.
+- multer: Middleware para processamento de requisições `multipart/form-data`, essencial para o recebimento e armazenamento de arquivos.
+- dayjs: Biblioteca leve para manipulação simplificada e segura de datas, cálculos de prazos e fusos horários.
+
+### Documentação
+- redoc: Bibliotecas conjuntas para ler anotações no código e gerar a interface gráfica interativa da documentação da API no padrão OpenAPI.
+
+### Segurança
+- jsonwebtoken:Biblioteca para geração e validação de tokens de autenticação (JWT) sem necessidade de armazenar sessões no servidor.
+- bcryptjs: Biblioteca para aplicação de funções de hash em senhas antes do salvamento no banco de dados.
+- cors: Middleware para configuração do Cross-Origin Resource Sharing, permitindo que aplicações front-end acessem a API.
+- helmet: Coleção de middlewares de segurança que ajustam os cabeçalhos HTTP para blindar a API contra vulnerabilidades comuns da web.
+- express-rate-limit: Middleware para controle de tráfego, limitando o número de requisições que um mesmo IP pode fazer em um intervalo de tempo.
+
+### Recursos e Qualidade (DevDependencies)
+- Recursos Nativos do Node.js: Uso das flags `--watch` (substitui o *nodemon* reiniciando o servidor ao salvar arquivos) e `--env-file` (substitui o *dotenv* carregando variáveis de ambiente automaticamente).
+- pino e pino-pretty: Biblioteca de logs estruturados em JSON de altíssima performance (`pino`) acompanhada de um formatador para tornar a leitura amigável no 
+- eslint e prettier: Ferramentas para analisar erros estáticos e forçar um padrão visual único de formatação no código de toda a equipe.
+
+# DEFINIÇÃO DE ROTAS
+usuarios
+/api/usuarios
+GET - buscarUsuario()
+POST - criarUsuario()
+PUT - atualizarUsuario()
+DELETE - excluirUsuario()
+
+pacientes
+/api/pacientes
+GET - buscarPaciente()
+POST - criarPaciente()
+PUT - atualizarPaciente()
+DELETE - excluirPaciente()
+
+pacientes_documentacoes_pessoais
+/api/pacientes/{id_paciente}/documentos/
+GET - buscarDocumentoPaciente()
+POST - criarDocumentoPaciente()
+PUT - atualizarDocumentoPaciente()
+DELETE - excluirDocumentoPaciente()
+
+convenios
+/api/convenios
+GET - buscarConvenio()
+POST - criarConvenio()
+PUT - atualizarConvenio()
+DELETE - excluirConvenio()
+
+convenios_planos
+/api/convenios/{id_convenio}/planos/
+GET - buscarPlanoConvenio()
+POST - criarPlanoConvenio()
+PUT - atualizarPlanoConvenio()
+DELETE - excluirPlanoConvenio()
+
+pacientes_convenios
+/api/pacientes/{id_paciente}/convenios/
+GET - buscarConvenioPaciente()
+POST - criarConvenioPaciente()
+PUT - atualizarConvenioPaciente()
+DELETE - excluirConvenioPaciente()
+
+profissionais_categorias
+/api/profissionais/categorias
+GET - buscarCategoriaProfissional()
+POST - criarCategoriaProfissional()
+PUT - atualizarCategoriaProfissional()
+DELETE - excluirCategoriaProfissional()
+
+profissionais
+/api/profissionais
+GET - buscarProfissional()
+POST - criarProfissional()
+PUT - atualizarProfissional()
+DELETE - excluirProfissional()
+
+profissionais_documentacoes_pessoais
+/api/profissionais/{id_profissional}/documentos/
+GET - buscarDocumentoProfissional()
+POST - criarDocumentoProfissional()
+PUT - atualizarDocumentoProfissional()
+DELETE - excluirDocumentoProfissional()
+
+profissionais_registros
+/api/profissionais/{id_profissional}/registros/
+GET - buscarRegistroProfissional()
+POST - criarRegistroProfissional()
+PUT - atualizarRegistroProfissional()
+DELETE - excluirRegistroProfissional()
+
+locais_categorias
+/api/locais/categorias
+GET - buscarCategoriaLocal()
+POST - criarCategoriaLocal()
+PUT - atualizarCategoriaLocal()
+DELETE - excluirCategoriaLocal()
+
+locais_enderecos
+/api/locais/{id_local}/enderecos/
+GET - buscarEnderecoLocal()
+POST - criarEnderecoLocal()
+PUT - atualizarEnderecoLocal()
+DELETE - excluirEnderecoLocal()
+
+locais
+/api/locais
+GET - buscarLocal()
+POST - criarLocal()
+PUT - atualizarLocal()
+DELETE - excluirLocal()
+
+locais_tipos_contatos
+/api/locais/tipos-contatos
+GET - buscarTipoContatoLocal()
+POST - criarTipoContatoLocal()
+PUT - atualizarTipoContatoLocal()
+DELETE - excluirTipoContatoLocal()
+
+locais_contatos
+/api/locais/{id_local}/contatos/
+GET - buscarContatoLocal()
+POST - criarContatoLocal()
+PUT - atualizarContatoLocal()
+DELETE - excluirContatoLocal()
+
+locais_avaliacao
+/api/locais/{id_local}/avaliacoes/
+GET - buscarAvaliacaoLocal()
+POST - criarAvaliacaoLocal()
+PUT - atualizarAvaliacaoLocal()
+DELETE - excluirAvaliacaoLocal()
+
+locais_fotos
+/api/locais/{id_local}/fotos/
+GET - buscarFotoLocal()
+POST - criarFotoLocal()
+PUT - atualizarFotoLocal()
+DELETE - excluirFotoLocal()
+
+procedimentos_tipos
+/api/procedimentos/tipos
+GET - buscarTipoProcedimento()
+POST - criarTipoProcedimento()
+PUT - atualizarTipoProcedimento()
+DELETE - excluirTipoProcedimento()
+
+procedimentos
+/api/procedimentos
+GET - buscarProcedimento()
+POST - criarProcedimento()
+PUT - atualizarProcedimento()
+DELETE - excluirProcedimento()
+
+procedimentos_tipos_documentos
+/api/procedimentos/{id_tipo_procedimento}/documentos/tipos
+GET - buscarDocumentoTipoProcedimento()
+POST - criarDocumentoTipoProcedimento()
+PUT - atualizarDocumentoTipoProcedimento()
+DELETE - excluirDocumentoTipoProcedimento()
+
+procedimentos_documentacoes
+/api/procedimentos/{id_procedimento}/documentos/
+GET - buscarDocumentoProcedimento()
+POST - criarDocumentoProcedimento()
+PUT - atualizarDocumentoProcedimento()
+DELETE - excluirDocumentoProcedimento()
+
+procedimentos_pagamentos
+/api/procedimentos/{id_procedimento}/pagamentos/
+GET - buscarPagamentoProcedimento()
+POST - criarPagamentoProcedimento()
+PUT - atualizarPagamentoProcedimento()
+DELETE - excluirPagamentoProcedimento()
+
+vacinas
+/api/vacinas
+GET - buscarVacina()
+POST - criarVacina()
+PUT - atualizarVacina()
+DELETE - excluirVacina()
+
+vacinas_doses_esquema
+/api/vacinas/{id_vacina}/esquemas-doses/
+GET - buscarEsquemaDosesVacina()
+POST - criarEsquemaDosesVacina()
+PUT - atualizarEsquemaDosesVacina()
+DELETE - excluirEsquemaDosesVacina()
+
+pacientes_vacinacoes
+/api/pacientes/{id_paciente}/vacinacoes/
+GET - buscarVacinacaoPaciente()
+POST - criarVacinacaoPaciente()
+PUT - atualizarVacinacaoPaciente()
+DELETE - excluirVacinacaoPaciente()
+rotas_schemas_db.txt
+Exibindo rotas_schemas_db.txt.
+
+

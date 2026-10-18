@@ -38,10 +38,14 @@ const corsConfig = {
 
 // Importação de rotas
 const rotaDocumentacao = require('./docs/DocumentacaoRota');
-
+const rotaAutenticacao = require('./routes/AutenticacaoRota');
 const rotaUsuarios = require('./routes/UsuariosRota');
 const rotaPacientes = require('./routes/PacientesRota');
 const rotaConvenios = require('./routes/ConveniosRota');
+const rotaLocais = require('./routes/LocaisRota');
+
+// Importação de Middlewares
+const validadorJSON = require('./middlewares/validadorJSON');
 
 class App {
     constructor() {
@@ -58,16 +62,20 @@ class App {
             crossOriginResourcePolicy: { policy: "cross-origin" }
         }));
         this.application.use(limiter);
+        this.application.use(validadorJSON);
+        this.application.use('/files', express.static(path.resolve(__dirname, '..', 'files')));
     }
 
     routes() {
         const apiRouter = express.Router();
 
         apiRouter.use('/docs', rotaDocumentacao);
+        apiRouter.use('/autenticacao', rotaAutenticacao)
 
         apiRouter.use('/usuarios', rotaUsuarios);
         apiRouter.use('/pacientes', rotaPacientes);
         apiRouter.use('/convenios', rotaConvenios);
+        apiRouter.use('/locais', rotaLocais);
 
         this.application.use('/api', apiRouter);
     }

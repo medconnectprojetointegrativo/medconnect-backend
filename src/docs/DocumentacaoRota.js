@@ -30,7 +30,7 @@ const redocHTML =
         </style>
     </head>
     <body>
-        <redoc spec-url="${apiJSONURL}"></redoc>
+        <redoc spec-url="/api/docs/${apiJSONURL}"></redoc>
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
     </body>
     </html>
@@ -59,6 +59,7 @@ class DocumentacaoRota {
         this.router.get('/api.json', (req, res) => {
             res.json(apiSpecification);
         });
+
     }
 }
 

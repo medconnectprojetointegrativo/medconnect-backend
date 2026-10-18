@@ -10,7 +10,9 @@
 		"prd": "node server.js",
 		"dev": "node --watch --env-file=.env server.js",
 		"prisma-generate-schemas": "npx prisma generate",
-		"prisma-migrate": "npx prisma migrate dev"
+		"prisma-migrate": "npx prisma migrate dev",
+		"prisma-seed": "npx prisma db seed",
+		"prisma-update": "npx prisma db pull"
 	},
 	"dependencies": {
 		"@prisma/adapter-pg": "^7.10.0",

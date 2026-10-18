@@ -1,14 +1,13 @@
 model LocalCategoria {
-  id_categoria_local Int      @id
-  nome_categoria     String?  @db.VarChar(100)
-
+  id_categoria_local Int     @id @default(autoincrement())
+  nome_categoria     String? @db.VarChar(100)
   locais             Local[]
 
   @@map("locais_categorias")
 }
 
 model LocalEndereco {
-  id_endereco_local Int      @id
+  id_endereco_local Int      @id @default(autoincrement())
   cep               String?  @db.Char(8)
   logradouro        String?  @db.VarChar(100)
   numero            String?  @db.VarChar(10)
@@ -18,61 +17,55 @@ model LocalEndereco {
   estado            String?  @db.Char(2)
   latitude          Decimal? @db.Decimal(10, 8)
   longitude         Decimal? @db.Decimal(10, 8)
-
   locais            Local[]
 
   @@map("locais_enderecos")
 }
 
 model Local {
-  id_local     Int      @id
-  id_endereco  Int?
-  id_categoria Int?
-  nome         String?  @db.VarChar(200)
-  cnpj         String?  @db.Char(14)
-  descricao    String?  @db.VarChar(500)
-
-  endereco     LocalEndereco?  @relation(fields: [id_endereco], references: [id_endereco_local])
-  categoria    LocalCategoria? @relation(fields: [id_categoria], references: [id_categoria_local])
-  
-  contatos      LocalContato[]
+  id_local      Int                 @id @default(autoincrement())
+  id_endereco   Int?
+  id_categoria  Int?
+  nome          String?             @db.VarChar(200)
+  cnpj          String?             @db.Char(14)
+  descricao     String?             @db.VarChar(500)
+  categoria     LocalCategoria?     @relation(fields: [id_categoria], references: [id_categoria_local])
+  endereco      LocalEndereco?      @relation(fields: [id_endereco], references: [id_endereco_local])
   avaliacoes    LocalAvaliacao[]
+  contatos      LocalContato[]
   fotos         LocalFoto[]
-  procedimentos Procedimento[]
   vacinacoes    PacienteVacinacao[]
+  procedimentos Procedimento[]
 
   @@map("locais")
 }
 
 model LocalTipoContato {
-  id_tipo_contato_local Int     @id
-  descricao             String? @db.VarChar(50)
-  tipo                  Int
-
+  id_tipo_contato_local Int            @id @default(autoincrement())
+  tipo             String?        @db.VarChar(50)
   contatos              LocalContato[]
 
   @@map("locais_tipos_contatos")
 }
 
 model LocalContato {
-  id_contato_local Int               @id
+  id_contato_local Int               @id @default(autoincrement())
   id_local         Int?
   id_tipo_contato  Int?
   numero_contato   String?           @db.VarChar(11)
-
   local            Local?            @relation(fields: [id_local], references: [id_local])
   tipo_contato     LocalTipoContato? @relation(fields: [id_tipo_contato], references: [id_tipo_contato_local])
+  descricao        String?           @db.VarChar(100)
 
   @@map("locais_contatos")
 }
 
 model LocalAvaliacao {
-  id_avaliacao_local Int      @id
+  id_avaliacao_local Int      @id @default(autoincrement())
   id_local           Int?
   id_usuario         Int?
   valor_avaliacao    Int?
   comentario         String?  @db.VarChar(350)
-
   local              Local?   @relation(fields: [id_local], references: [id_local])
   usuario            Usuario? @relation(fields: [id_usuario], references: [id_usuario])
 
@@ -80,13 +73,12 @@ model LocalAvaliacao {
 }
 
 model LocalFoto {
-  id_foto_local            Int     @id
+  id_foto_local            Int     @id @default(autoincrement())
   id_local                 Int?
   nome_arquivo_original    String? @db.VarChar(100)
   nome_arquivo_padronizado String? @db.VarChar(200)
   caminho_arquivo          String? @db.VarChar(200)
   tipo_foto                String? @db.VarChar(10)
-
   local                    Local?  @relation(fields: [id_local], references: [id_local])
 
   @@map("locais_fotos")
