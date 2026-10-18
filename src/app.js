@@ -12,7 +12,7 @@ const rateLimit = require('express-rate-limit');
 
 // Configuração do limitador de requisições global
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // Janela de 15 minutos
+    windowMs: 5 * 60 * 1000, // Janela de 15 minutos
     max: 100, // Limita cada IP a 100 requisições por janela
     message: { error: 'Muitas requisições deste IP, tente novamente em 15 minutos.' },
     standardHeaders: true, // Retorna os headers no padrão `RateLimit-*`

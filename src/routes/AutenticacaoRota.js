@@ -24,6 +24,7 @@ class AutenticacaoRota {
     // Rota padrão: /api/autenticacao
     autenticacaoRota() {
         this.router.post('/login', this.autenticacaoController.login);
+        this.router.post('/validar-token', this.autenticacaoController.validarToken);
     }
 }
 

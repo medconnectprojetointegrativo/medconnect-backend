@@ -25,18 +25,25 @@ npm install
 **2. Configuração das Variáveis de Ambiente**
 Na raiz do projeto, crie um arquivo chamado `.env` e configure as variáveis de ambiente conforme o arquivo .env.example:
 ```env
-AMBIENTE=DESENVOLVIMENTO / PRODUÇÃO
+AMBIENTE=DESENVOLVIMENTO/PRODUÇÃO
 BACKEND_PORT=3000
 
 FRONTEND_PRD_URL=https://seu.site.com.br
 FRONTEND_DEV_URL=http://localhost:5173
 
-DATABASE_URL="postgresql://postgres:suasenha@localhost:5432/medconnect?schema=public"
-DATABASE=
-DATABASE_USER=
+PRISMA_DATABASE_URL="postgresql://postgres:suasenha@localhost:5432/medconnect?schema=public"
+DATABASE=medconnect
+DATABASE_USER=postgres
 DATABASE_USER_PASSWORD=
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
+
+JWT_SECRET=
+JWT_EXPIRES_IN=8h
+
+ADMIN_LOGIN=admin
+ADMIN_EMAIL=admin@admin.com
+ADMIN_SENHA_INICIAL=
 ```
 
 ## Banco de Dados com Prisma
@@ -49,7 +56,13 @@ Este comando lê os esquemas (como `pacientes.prisma` e `usuarios.prisma`), cria
 npm run prisma-migrate --name init_medconnect
 ```
 
-**2. Gere o Prisma Client**
+**2. Execute as Seeds**
+Este comando executa as seeds de credenciais de admin.
+```bash
+npm run prisma-seed
+```
+
+**3. Gere o Prisma Client**
 Sempre que você alterar seus arquivos `.prisma`, rode este comando para atualizar as tipagens no código JavaScript:
 ```bash
 npm run prisma-generate-schemas

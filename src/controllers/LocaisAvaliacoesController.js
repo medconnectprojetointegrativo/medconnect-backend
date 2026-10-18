@@ -148,6 +148,46 @@ class LocaisAvaliacoesController {
             return response.serverError(res, "Erro ao eliminar a avaliação solicitada.");
         }
     }
+
+    async calcularMediaAvaliacoesPorLocal(req, res) {
+        const { id_local } = req.params;
+        const id = Number(id_local);
+
+        if (isNaN(id)) {
+            return response.error(res, "O identificador do local informado deve ser um número válido.");
+        }
+
+        try {
+            const agregacao = await prisma.localAvaliacao.aggregate({
+                where: { id_local: id },
+                _avg: {
+                    valor_avaliacao: true
+                },
+                _count: {
+                    valor_avaliacao: true
+                }
+            });
+
+            const totalAvaliacoes = agregacao._count.valor_avaliacao;
+            const mediaAvaliacao = agregacao._avg.valor_avaliacao;
+
+            if (totalAvaliacoes === 0 || mediaAvaliacao === null) {
+                return response.notFound(res, "Nenhuma avaliação encontrada para calcular a média deste local.");
+            }
+
+            const resultado = {
+                id_local: id,
+                total_avaliacoes: totalAvaliacoes,
+                media_avaliacao: Number(mediaAvaliacao.toFixed(1)) // Arredonda para 1 casa decimal (ex: 4.5)
+            };
+
+            logger.info("Média de avaliações calculada com sucesso!");
+            return response.success(res, "Média de avaliações calculada com sucesso!", resultado);
+        } catch (error) {
+            logger.error({ err: error }, "Erro ao executar: LocaisAvaliacoesController -> calcularMediaAvaliacoesPorLocal()");
+            return response.error(res, "Erro ao calcular as avaliações do local.");
+        }
+    }
 }
 
 module.exports = new LocaisAvaliacoesController();
