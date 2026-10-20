@@ -42,7 +42,13 @@ const rotaAutenticacao = require('./routes/AutenticacaoRota');
 const rotaUsuarios = require('./routes/UsuariosRota');
 const rotaPacientes = require('./routes/PacientesRota');
 const rotaConvenios = require('./routes/ConveniosRota');
+<<<<<<< Updated upstream
 const rotaLocais = require('./routes/LocaisRota');
+=======
+const rotaVacinas = require("./routes/VacinasRota");
+const rotaProfissionais = require("./routes/ProfissionaisRota"); 
+
+>>>>>>> Stashed changes
 
 // Importação de Middlewares
 const validadorJSON = require('./middlewares/validadorJSON');
@@ -75,7 +81,13 @@ class App {
         apiRouter.use('/usuarios', rotaUsuarios);
         apiRouter.use('/pacientes', rotaPacientes);
         apiRouter.use('/convenios', rotaConvenios);
+<<<<<<< Updated upstream
         apiRouter.use('/locais', rotaLocais);
+=======
+        apiRouter.use("/vacinas", rotaVacinas);
+        apiRouter.use("/profissionais", rotaProfissionais);
+
+>>>>>>> Stashed changes
 
         this.application.use('/api', apiRouter);
     }

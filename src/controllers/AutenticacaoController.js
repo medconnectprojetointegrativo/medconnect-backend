@@ -16,7 +16,7 @@ class AutenticacaoController {
             if (!login || !senha) {
                 return response.error(res, "Informe um e-mail e senha.");
             }
-
+ 
             const usuario = await prisma.usuario.findFirst({
                 where: { login: login },
             });
