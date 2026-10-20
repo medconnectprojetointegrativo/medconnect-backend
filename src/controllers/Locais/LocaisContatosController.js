@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class LocaisContatosController {
     async buscarContato(req, res) {
@@ -8,7 +8,7 @@ class LocaisContatosController {
         const id = Number(id_contato_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -17,14 +17,14 @@ class LocaisContatosController {
             });
 
             if (!contato) {
-                return response.notFound(res, "Contato não encontrado.");
+                return resposta.notFound(res, "Contato não encontrado.");
             }
 
             logger.info("Contato retornado com sucesso!");
-            return response.success(res, "Contato encontrado com sucesso!", contato);
+            return resposta.success(res, "Contato encontrado com sucesso!", contato);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisContatosController -> buscarContato()");
-            return response.error(res, "Erro ao procurar o contato solicitado.");
+            return resposta.error(res, "Erro ao procurar o contato solicitado.");
         }
     }
 
@@ -33,7 +33,7 @@ class LocaisContatosController {
         const id = Number(id_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador do local informado deve ser um número válido.");
+            return resposta.error(res, "O identificador do local informado deve ser um número válido.");
         }
 
         try {
@@ -42,14 +42,14 @@ class LocaisContatosController {
             });
 
             if (!contatos || contatos.length === 0) {
-                return response.notFound(res, "Nenhum contato encontrado para este estabelecimento.");
+                return resposta.notFound(res, "Nenhum contato encontrado para este estabelecimento.");
             }
 
             logger.info("Contatos listados com sucesso!");
-            return response.success(res, "Contatos recuperados com sucesso!", contatos);
+            return resposta.success(res, "Contatos recuperados com sucesso!", contatos);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisContatosController -> buscarTodosContatosPorLocal()");
-            return response.error(res, "Erro ao listar os contatos do local.");
+            return resposta.error(res, "Erro ao listar os contatos do local.");
         }
     }
 
@@ -57,7 +57,7 @@ class LocaisContatosController {
         const { id_local, id_tipo_contato, numero_contato, descricao } = req.body;
 
         if (!id_local || !id_tipo_contato || !numero_contato || !descricao) {
-            return response.error(res, "Os campos 'id_local', 'id_tipo_contato', 'numero_contato' e 'descricao' são obrigatórios.");
+            return resposta.error(res, "Os campos 'id_local', 'id_tipo_contato', 'numero_contato' e 'descricao' são obrigatórios.");
         }
 
         try {
@@ -74,10 +74,10 @@ class LocaisContatosController {
             });
 
             logger.info("Contato criado com sucesso!");
-            return response.created(res, "Contato registado com sucesso!", resultado);
+            return resposta.created(res, "Contato registado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisContatosController -> criarContato()");
-            return response.error(res, "Falha ao registar o contato. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao registar o contato. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -87,7 +87,7 @@ class LocaisContatosController {
         const id = Number(id_contato_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -96,7 +96,7 @@ class LocaisContatosController {
             });
 
             if (!contatoExistente) {
-                return response.notFound(res, "Contato não localizado para atualização.");
+                return resposta.notFound(res, "Contato não localizado para atualização.");
             }
 
             const resultado = await prisma.$transaction(async (tx) => {
@@ -113,10 +113,10 @@ class LocaisContatosController {
             });
 
             logger.info("Contato atualizado com sucesso!");
-            return response.created(res, "Contato atualizado com sucesso!", resultado);
+            return resposta.created(res, "Contato atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisContatosController -> atualizarContato()");
-            return response.error(res, "Falha ao atualizar o contato. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao atualizar o contato. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -125,7 +125,7 @@ class LocaisContatosController {
         const id = Number(id_contato_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -134,7 +134,7 @@ class LocaisContatosController {
             });
 
             if (!contatoExistente) {
-                return response.notFound(res, "Contato não encontrado para exclusão.");
+                return resposta.notFound(res, "Contato não encontrado para exclusão.");
             }
 
             await prisma.$transaction(async (tx) => {
@@ -144,10 +144,10 @@ class LocaisContatosController {
             });
 
             logger.info("Contato excluído com sucesso!");
-            return response.success(res, "Contato removido com sucesso!");
+            return resposta.success(res, "Contato removido com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisContatosController -> excluirContato()");
-            return response.serverError(res, "Erro ao eliminar o contato solicitado.");
+            return resposta.serverError(res, "Erro ao eliminar o contato solicitado.");
         }
     }
 }

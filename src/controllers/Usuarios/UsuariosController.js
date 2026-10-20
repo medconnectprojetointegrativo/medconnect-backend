@@ -1,7 +1,7 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
-const password = require('../utils/password');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
+const { criptografarSenha } = require('../../utils/senhas');
 
 
 class UsuariosController {
@@ -21,14 +21,14 @@ class UsuariosController {
                 }
             );
 
-            if (!usuarios || usuarios.length === 0) return response.notFound(res, "Usuário não encontrado.");
+            if (!usuarios || usuarios.length === 0) return resposta.notFound(res, "Usuário não encontrado.");
 
             logger.info("Usuário retornado com sucesso!");
-            return response.success(res, "Usuário encontrado com sucesso!", usuarios);
+            return resposta.success(res, "Usuário encontrado com sucesso!", usuarios);
         } catch (err) {
             logger.error({ err }, "Erro ao executar: UsuariosController -> buscarUsuario() ")
 
-            return response.error(res, "Erro ao buscar o usuário solicitado.");
+            return resposta.error(res, "Erro ao buscar o usuário solicitado.");
         }
     }
 
@@ -43,14 +43,14 @@ class UsuariosController {
                 }
             );
 
-            if (!usuarios || usuarios.length === 0) return response.notFound(res, "Usuários não encontrados.");
+            if (!usuarios || usuarios.length === 0) return resposta.notFound(res, "Usuários não encontrados.");
 
             logger.info("Usuários retornados com sucesso!");
-            return response.success(res, "Usuários encontrados com sucesso!", usuarios);
+            return resposta.success(res, "Usuários encontrados com sucesso!", usuarios);
         } catch (err) {
             logger.error({ err }, "Erro ao executar: UsuariosController -> buscarTodosUsuario() ")
 
-            return response.error(res, "Erro ao buscar os usuários solicitados.");
+            return resposta.error(res, "Erro ao buscar os usuários solicitados.");
         }
     }
 
@@ -59,7 +59,7 @@ class UsuariosController {
         const { login, email, senha, nome, sobrenome, data_nascimento, numero_contato } = req.body;
 
         try {
-            const senha_hash = await password.hashPassword(senha);
+            const senha_hash = await criptografarSenha(senha);
 
             const resultado = await prisma.$transaction(async (tx) => {
 
@@ -82,12 +82,12 @@ class UsuariosController {
             });
 
             logger.info("Usuário e perfil criados com sucesso!");
-            return response.created(res, "Usuário e perfil criados com sucesso!", resultado);
+            return resposta.created(res, "Usuário e perfil criados com sucesso!", resultado);
 
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: UsuariosController -> criarUsuarioPaciente() ")
 
-            return response.error(res, "Falha ao criar o cadastro completo. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao criar o cadastro completo. Nenhuma alteração foi salva.");
         }
     }
 
@@ -96,7 +96,7 @@ class UsuariosController {
         const { login, email, senha, nome, sobrenome, data_nascimento, numero_contato } = req.body;
 
         try {
-            const senha_hash = await password.hashPassword(senha);
+            const senha_hash = await criptografarSenha(senha);
 
             const resultado = await prisma.$transaction(async (tx) => {
 
@@ -118,12 +118,12 @@ class UsuariosController {
             });
 
             logger.info("Usuário e perfil criados com sucesso!")
-            return response.created(res, "Usuário e perfil criados com sucesso!", resultado);
+            return resposta.created(res, "Usuário e perfil criados com sucesso!", resultado);
 
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: UsuariosController -> criarUsuarioProfissional() ")
 
-            return response.error(res, "Falha ao criar o cadastro completo. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao criar o cadastro completo. Nenhuma alteração foi salva.");
         }
     }
 
@@ -132,7 +132,7 @@ class UsuariosController {
         const { email, senha } = req.body;
 
         try {
-            const senha_hash = await password.hashPassword(senha);
+            const senha_hash = await criptografarSenha(senha);
 
             const resultado = await prisma.$transaction(async (tx) => {
 
@@ -145,12 +145,12 @@ class UsuariosController {
             });
 
             logger.info("Usuário atualizado com sucesso!");
-            return response.created(res, "Usuário atualizado com sucesso!", resultado);
+            return resposta.created(res, "Usuário atualizado com sucesso!", resultado);
 
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: UsuariosController -> atualizarUsuario() ")
 
-            return response.error(res, "Falha ao atualizar o usuário. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao atualizar o usuário. Nenhuma alteração foi salva.");
         }
     }
 
@@ -162,7 +162,7 @@ class UsuariosController {
                 where: { id_usuario: Number(id_usuario) }
             });
 
-            if (!usuario) return response.notFound(res, "Usuário não encontrado.");
+            if (!usuario) return resposta.notFound(res, "Usuário não encontrado.");
 
             await prisma.$transaction(async (tx) => {
                 await tx.usuario.delete({
@@ -171,12 +171,12 @@ class UsuariosController {
             });
 
             logger.info("Usuário excluído com sucesso!");
-            return response.success(res, "Usuário e dependências excluídas com sucesso!");
+            return resposta.success(res, "Usuário e dependências excluídas com sucesso!");
 
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: UsuariosController -> excluirUsuario()");
 
-            return response.serverError(res, "Falha ao deletar o usuário.");
+            return resposta.serverError(res, "Falha ao deletar o usuário.");
         }
     }
 

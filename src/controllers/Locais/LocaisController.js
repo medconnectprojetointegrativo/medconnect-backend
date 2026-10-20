@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class LocaisController {
     async buscarLocal(req, res) {
@@ -18,15 +18,15 @@ class LocaisController {
                 }
             });
 
-            if (!local) return response.notFound(res, "Local não encontrado.");
+            if (!local) return resposta.notFound(res, "Local não encontrado.");
 
             logger.info("Local retornado com sucesso!");
 
-            return response.success(res, "Local encontrado com sucesso!", local);
+            return resposta.success(res, "Local encontrado com sucesso!", local);
         } catch (err) {
             logger.error({ err }, "Erro ao executar: LocaisController -> buscarLocal()");
 
-            return response.error(res, "Erro ao buscar o local solicitado.");
+            return resposta.error(res, "Erro ao buscar o local solicitado.");
         }
     }
 
@@ -46,15 +46,15 @@ class LocaisController {
                 },
             });
 
-            if (!locais || locais.length === 0) return response.notFound(res, "Locais não encontrados.");
+            if (!locais || locais.length === 0) return resposta.notFound(res, "Locais não encontrados.");
 
             logger.info("Locais retornados com sucesso!");
 
-            return response.success(res, "Locais encontrados com sucesso!", locais);
+            return resposta.success(res, "Locais encontrados com sucesso!", locais);
         } catch (err) {
             logger.error({ err }, "Erro ao executar: LocaisController -> buscarTodosLocais()");
 
-            return response.error(res, "Erro ao buscar os locais solicitados.");
+            return resposta.error(res, "Erro ao buscar os locais solicitados.");
         }
     }
 
@@ -78,11 +78,11 @@ class LocaisController {
 
             logger.info("Local criado com sucesso!");
 
-            return response.created(res, "Local criado com sucesso!", resultado);
+            return resposta.created(res, "Local criado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisController -> criarLocal()");
 
-            return response.error(res, "Falha ao criar o local. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao criar o local. Nenhuma alteração foi salva.");
         }
     }
 
@@ -108,11 +108,11 @@ class LocaisController {
 
             logger.info("Local atualizado com sucesso!");
 
-            return response.created(res, "Local atualizado com sucesso!", resultado);
+            return resposta.created(res, "Local atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisController -> atualizarLocal()");
 
-            return response.error(res, "Falha ao atualizar o local. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao atualizar o local. Nenhuma alteração foi salva.");
         }
     }
 
@@ -124,7 +124,7 @@ class LocaisController {
                 where: { id_local: Number(id_local) }
             });
 
-            if (!local) return response.notFound(res, "Local não encontrado.");
+            if (!local) return resposta.notFound(res, "Local não encontrado.");
 
             await prisma.$transaction(async (tx) => {
                 await tx.local.delete({
@@ -134,11 +134,11 @@ class LocaisController {
 
             logger.info("Local excluído com sucesso!");
 
-            return response.success(res, "Local excluído com sucesso!");
+            return resposta.success(res, "Local excluído com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisController -> excluirLocal()");
 
-            return response.serverError(res, "Falha ao excluir o local.");
+            return resposta.serverError(res, "Falha ao excluir o local.");
         }
     }
 }

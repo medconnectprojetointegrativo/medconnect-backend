@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class LocaisAvaliacoesController {
     async buscarAvaliacao(req, res) {
@@ -8,7 +8,7 @@ class LocaisAvaliacoesController {
         const id = Number(id_avaliacao_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -17,14 +17,14 @@ class LocaisAvaliacoesController {
             });
 
             if (!avaliacao) {
-                return response.notFound(res, "Avaliação não encontrada.");
+                return resposta.notFound(res, "Avaliação não encontrada.");
             }
 
             logger.info("Avaliação retornada com sucesso!");
-            return response.success(res, "Avaliação encontrada com sucesso!", avaliacao);
+            return resposta.success(res, "Avaliação encontrada com sucesso!", avaliacao);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisAvaliacaoController -> buscarAvaliacao()");
-            return response.error(res, "Erro ao procurar a avaliação solicitada.");
+            return resposta.error(res, "Erro ao procurar a avaliação solicitada.");
         }
     }
 
@@ -33,7 +33,7 @@ class LocaisAvaliacoesController {
         const id = Number(id_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador do local informado deve ser um número válido.");
+            return resposta.error(res, "O identificador do local informado deve ser um número válido.");
         }
 
         try {
@@ -42,14 +42,14 @@ class LocaisAvaliacoesController {
             });
 
             if (!avaliacoes || avaliacoes.length === 0) {
-                return response.notFound(res, "Nenhuma avaliação encontrada para este local.");
+                return resposta.notFound(res, "Nenhuma avaliação encontrada para este local.");
             }
 
             logger.info("Avaliações listadas com sucesso!");
-            return response.success(res, "Avaliações recuperadas com sucesso!", avaliacoes);
+            return resposta.success(res, "Avaliações recuperadas com sucesso!", avaliacoes);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisAvaliacaoController -> buscarTodasAvaliacoesPorLocal()");
-            return response.error(res, "Erro ao listar as avaliações do local.");
+            return resposta.error(res, "Erro ao listar as avaliações do local.");
         }
     }
 
@@ -57,7 +57,7 @@ class LocaisAvaliacoesController {
         const { id_local, id_usuario, valor_avaliacao, comentario } = req.body;
 
         if (!id_local || !id_usuario || valor_avaliacao === undefined) {
-            return response.error(res, "Os campos 'id_local', 'id_usuario' e 'valor_avaliacao' são obrigatórios.");
+            return resposta.error(res, "Os campos 'id_local', 'id_usuario' e 'valor_avaliacao' são obrigatórios.");
         }
 
         try {
@@ -74,10 +74,10 @@ class LocaisAvaliacoesController {
             });
 
             logger.info("Avaliação criada com sucesso!");
-            return response.created(res, "Avaliação registada com sucesso!", resultado);
+            return resposta.created(res, "Avaliação registada com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisAvaliacaoController -> criarAvaliacao()");
-            return response.error(res, "Falha ao registar a avaliação. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao registar a avaliação. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -87,7 +87,7 @@ class LocaisAvaliacoesController {
         const id = Number(id_avaliacao_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -96,7 +96,7 @@ class LocaisAvaliacoesController {
             });
 
             if (!avaliacaoExistente) {
-                return response.notFound(res, "Avaliação não encontrada para atualização.");
+                return resposta.notFound(res, "Avaliação não encontrada para atualização.");
             }
 
             const resultado = await prisma.$transaction(async (tx) => {
@@ -111,10 +111,10 @@ class LocaisAvaliacoesController {
             });
 
             logger.info("Avaliação atualizada com sucesso!");
-            return response.created(res, "Avaliação atualizada com sucesso!", resultado);
+            return resposta.created(res, "Avaliação atualizada com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisAvaliacaoController -> atualizarAvaliacao()");
-            return response.error(res, "Falha ao atualizar a avaliação. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao atualizar a avaliação. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -123,7 +123,7 @@ class LocaisAvaliacoesController {
         const id = Number(id_avaliacao_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -132,7 +132,7 @@ class LocaisAvaliacoesController {
             });
 
             if (!avaliacaoExistente) {
-                return response.notFound(res, "Avaliação não encontrada para exclusão.");
+                return resposta.notFound(res, "Avaliação não encontrada para exclusão.");
             }
 
             await prisma.$transaction(async (tx) => {
@@ -142,10 +142,10 @@ class LocaisAvaliacoesController {
             });
 
             logger.info("Avaliação excluída com sucesso!");
-            return response.success(res, "Avaliação removida com sucesso!");
+            return resposta.success(res, "Avaliação removida com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisAvaliacaoController -> excluirAvaliacao()");
-            return response.serverError(res, "Erro ao eliminar a avaliação solicitada.");
+            return resposta.serverError(res, "Erro ao eliminar a avaliação solicitada.");
         }
     }
 
@@ -154,7 +154,7 @@ class LocaisAvaliacoesController {
         const id = Number(id_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador do local informado deve ser um número válido.");
+            return resposta.error(res, "O identificador do local informado deve ser um número válido.");
         }
 
         try {
@@ -172,7 +172,7 @@ class LocaisAvaliacoesController {
             const mediaAvaliacao = agregacao._avg.valor_avaliacao;
 
             if (totalAvaliacoes === 0 || mediaAvaliacao === null) {
-                return response.notFound(res, "Nenhuma avaliação encontrada para calcular a média deste local.");
+                return resposta.notFound(res, "Nenhuma avaliação encontrada para calcular a média deste local.");
             }
 
             const resultado = {
@@ -182,10 +182,10 @@ class LocaisAvaliacoesController {
             };
 
             logger.info("Média de avaliações calculada com sucesso!");
-            return response.success(res, "Média de avaliações calculada com sucesso!", resultado);
+            return resposta.success(res, "Média de avaliações calculada com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisAvaliacoesController -> calcularMediaAvaliacoesPorLocal()");
-            return response.error(res, "Erro ao calcular as avaliações do local.");
+            return resposta.error(res, "Erro ao calcular as avaliações do local.");
         }
     }
 }

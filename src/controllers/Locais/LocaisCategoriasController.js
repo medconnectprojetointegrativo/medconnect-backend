@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class LocaisCategoriasController {
     /**
@@ -11,7 +11,7 @@ class LocaisCategoriasController {
         const id = Number(id_categoria_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -20,14 +20,14 @@ class LocaisCategoriasController {
             });
 
             if (!categoria) {
-                return response.notFound(res, "Categoria não encontrada.");
+                return resposta.notFound(res, "Categoria não encontrada.");
             }
 
             logger.info("Categoria retornada com sucesso!");
-            return response.success(res, "Categoria encontrada com sucesso!", categoria);
+            return resposta.success(res, "Categoria encontrada com sucesso!", categoria);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisCategoriasController -> buscarCategoria()");
-            return response.error(res, "Erro ao procurar a categoria solicitada.");
+            return resposta.error(res, "Erro ao procurar a categoria solicitada.");
         }
     }
 
@@ -39,14 +39,14 @@ class LocaisCategoriasController {
             const categorias = await prisma.localCategoria.findMany();
 
             if (!categorias || categorias.length === 0) {
-                return response.notFound(res, "Nenhuma categoria encontrada.");
+                return resposta.notFound(res, "Nenhuma categoria encontrada.");
             }
 
             logger.info("Categorias listadas com sucesso!");
-            return response.success(res, "Categorias recuperadas com sucesso!", categorias);
+            return resposta.success(res, "Categorias recuperadas com sucesso!", categorias);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisCategoriasController -> buscarTodasCategorias()");
-            return response.error(res, "Erro ao listar as categorias.");
+            return resposta.error(res, "Erro ao listar as categorias.");
         }
     }
 
@@ -57,7 +57,7 @@ class LocaisCategoriasController {
         const { nome_categoria } = req.body;
 
         if (!nome_categoria || typeof nome_categoria !== 'string' || !nome_categoria.trim()) {
-            return response.error(res, "O campo 'nome_categoria' é obrigatório.");
+            return resposta.error(res, "O campo 'nome_categoria' é obrigatório.");
         }
 
         try {
@@ -71,10 +71,10 @@ class LocaisCategoriasController {
             });
 
             logger.info("Categoria criada com sucesso!");
-            return response.created(res, "Categoria criada com sucesso!", resultado);
+            return resposta.created(res, "Categoria criada com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisCategoriasController -> criarCategoria()");
-            return response.error(res, "Falha ao criar a categoria. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao criar a categoria. Nenhuma alteração foi salva.");
         }
     }
 
@@ -87,7 +87,7 @@ class LocaisCategoriasController {
 
         const id = Number(id_categoria_local);
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -96,7 +96,7 @@ class LocaisCategoriasController {
             });
 
             if (!categoriaExistente) {
-                return response.notFound(res, "Categoria não localizada para atualização.");
+                return resposta.notFound(res, "Categoria não localizada para atualização.");
             }
 
             const resultado = await prisma.$transaction(async (tx) => {
@@ -110,10 +110,10 @@ class LocaisCategoriasController {
             });
 
             logger.info("Categoria atualizada com sucesso!");
-            return response.created(res, "Categoria atualizada com sucesso!", resultado);
+            return resposta.created(res, "Categoria atualizada com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisCategoriasController -> atualizarCategoria()");
-            return response.error(res, "Falha ao atualizar a categoria. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao atualizar a categoria. Nenhuma alteração foi salva.");
         }
     }
 
@@ -125,7 +125,7 @@ class LocaisCategoriasController {
         const id = Number(id_categoria_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -134,7 +134,7 @@ class LocaisCategoriasController {
             });
 
             if (!categoriaExistente) {
-                return response.notFound(res, "Categoria não encontrada para exclusão.");
+                return resposta.notFound(res, "Categoria não encontrada para exclusão.");
             }
 
             await prisma.$transaction(async (tx) => {
@@ -144,10 +144,10 @@ class LocaisCategoriasController {
             });
 
             logger.info("Categoria excluída com sucesso!");
-            return response.success(res, "Categoria excluída com sucesso!");
+            return resposta.success(res, "Categoria excluída com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisCategoriasController -> excluirCategoria()");
-            return response.serverError(res, "Erro ao excluir a categoria solicitada.");
+            return resposta.serverError(res, "Erro ao excluir a categoria solicitada.");
         }
     }
 }

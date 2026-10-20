@@ -9,7 +9,7 @@ class UsuariosRota {
     }
 
     controllers() {
-        this.usuariosController = require('../controllers/UsuariosController');
+        this.usuariosController = require('../controllers/Usuarios/UsuariosController');
     }
 
     routes() {

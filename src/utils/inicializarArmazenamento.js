@@ -2,9 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const logger = require('./logger');
 
-/**
- * Garante que todas as pastas de upload existam antes de iniciar os serviços.
- */
+/*
+    inicializarArmazenamento.js
+    Função de geração da pasta "files", no qual a API direciona arquivos para armazenamento físico.
+*/
 function inicializarPastasArmazenamento() {
     const diretorioBase = path.resolve(__dirname, '..', '..', 'files');
 

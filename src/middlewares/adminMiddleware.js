@@ -1,4 +1,4 @@
-const response = require('../utils/response');
+const resposta = require('../utils/resposta');
 
 /**
  * Middleware para restringir o acesso apenas a usuários com perfil de Admin.
@@ -10,7 +10,7 @@ const nomeFuncaoAdmin = "ADMIN"
 function adminMiddleware(req, res, next) {
     // 1. Garante que o authMiddleware rodou antes
     if (!req.dadosUsuario) {
-        return response.unauthorized("Acesso negado. Realize o login para verificação do usuário.")
+        return resposta.unauthorized("Acesso negado. Realize o login para verificação do usuário.")
     }
 
     // 2. Valida o cargo/papel do usuário
@@ -18,7 +18,7 @@ function adminMiddleware(req, res, next) {
     const role = req.dadosUsuario.funcao
 
     if (role !== nomeFuncaoAdmin) {
-        return response.forbidden(res, "Acesso restrito.")
+        return resposta.forbidden(res, "Acesso restrito.")
     }
 
     return next();

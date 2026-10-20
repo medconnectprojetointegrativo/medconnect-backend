@@ -9,7 +9,7 @@ class AutenticacaoRota {
     }
 
     controllers() {
-        this.autenticacaoController = require('../controllers/AutenticacaoController');
+        this.autenticacaoController = require('../controllers/Usuarios/AutenticacaoController');
     }
 
     routes() {

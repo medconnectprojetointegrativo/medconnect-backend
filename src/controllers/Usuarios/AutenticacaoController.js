@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN
@@ -14,18 +14,18 @@ class AutenticacaoController {
             const { login, senha } = req.body;
 
             if (!login || !senha) {
-                return response.error(res, "Informe um e-mail e senha.");
+                return resposta.error(res, "Informe um e-mail e senha.");
             }
 
             const usuario = await prisma.usuario.findFirst({
                 where: { login: login },
             });
 
-            if (!usuario) return response.unauthorized("Usuário ou senhas inválidos.")
+            if (!usuario) return resposta.unauthorized("Usuário ou senhas inválidos.")
 
             const isPasswordValid = await bcrypt.compare(senha, usuario.senha_hash);
             if (!isPasswordValid) {
-                return response.unauthorized(res, "Usuário ou senhas inválidos.")
+                return resposta.unauthorized(res, "Usuário ou senhas inválidos.")
             }
 
             // Geração do token JWT
@@ -36,11 +36,11 @@ class AutenticacaoController {
             );
 
             logger.info(`Usuário ${usuario.id_usuario} autenticado com sucesso!`);
-            return response.success(res, "Login realizado com sucesso.", { token, id_usuario: usuario.id_usuario })
+            return resposta.success(res, "Login realizado com sucesso.", { token, id_usuario: usuario.id_usuario })
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: AutenticacaoController -> login() ")
 
-            return response.serverError(res, "Falha ao realizar login.");
+            return resposta.serverError(res, "Falha ao realizar login.");
         }
     }
 
@@ -49,12 +49,12 @@ class AutenticacaoController {
             const authHeader = req.headers.authorization;
 
             if (!authHeader) {
-                return response.unauthorized(res, "Token não fornecido.");
+                return resposta.unauthorized(res, "Token não fornecido.");
             }
 
             const parts = authHeader.split(" ");
             if (parts.length !== 2 || parts[0] !== "Bearer") {
-                return response.unauthorized(res, "Formato do token inválido.");
+                return resposta.unauthorized(res, "Formato do token inválido.");
             }
 
             const token = parts[1];
@@ -65,9 +65,9 @@ class AutenticacaoController {
                 decoded = jwt.verify(token, JWT_SECRET);
             } catch (err) {
                 if (err.name === "TokenExpiredError") {
-                    return response.unauthorized(res, "Sessão expirada. Faça login novamente.");
+                    return resposta.unauthorized(res, "Sessão expirada. Faça login novamente.");
                 }
-                return response.unauthorized(res, "Token inválido.");
+                return resposta.unauthorized(res, "Token inválido.");
             }
 
             // 2. Busca os dados atualizados no banco a partir do payload descriptografado/decodificado
@@ -89,7 +89,7 @@ class AutenticacaoController {
             });
 
             if (!usuario) {
-                return response.notFound(res, "Usuário não encontrado.");
+                return resposta.notFound(res, "Usuário não encontrado.");
             }
 
             let id_paciente = null;
@@ -118,10 +118,10 @@ class AutenticacaoController {
             };
 
             logger.info(`Token do usuário ${usuarioFormatado.id_usuario} validado com sucesso!`);
-            return response.success(res, "Sessão ativa e válida.", usuarioFormatado);
+            return resposta.success(res, "Sessão ativa e válida.", usuarioFormatado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: AutenticacaoController -> validarToken()");
-            return response.serverError(res, "Falha ao validar a sessão do usuário.");
+            return resposta.serverError(res, "Falha ao validar a sessão do usuário.");
         }
     }
 };

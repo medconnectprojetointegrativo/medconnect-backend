@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,7 +12,7 @@ class LocaisFotosController {
         const id = Number(id_foto_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -21,14 +21,14 @@ class LocaisFotosController {
             });
 
             if (!foto) {
-                return response.notFound(res, "Fotografia não encontrada.");
+                return resposta.notFound(res, "Fotografia não encontrada.");
             }
 
             logger.info("Foto retornada com sucesso!");
-            return response.success(res, "Fotografia encontrada com sucesso!", foto);
+            return resposta.success(res, "Fotografia encontrada com sucesso!", foto);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisFotosController -> buscarFoto()");
-            return response.error(res, "Erro ao procurar o registo da foto.");
+            return resposta.error(res, "Erro ao procurar o registo da foto.");
         }
     }
 
@@ -37,7 +37,7 @@ class LocaisFotosController {
         const id = Number(id_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador do local informado deve ser um número válido.");
+            return resposta.error(res, "O identificador do local informado deve ser um número válido.");
         }
 
         try {
@@ -46,14 +46,14 @@ class LocaisFotosController {
             });
 
             if (!fotos || fotos.length === 0) {
-                return response.notFound(res, "Nenhuma fotografia encontrada para este estabelecimento.");
+                return resposta.notFound(res, "Nenhuma fotografia encontrada para este estabelecimento.");
             }
 
             logger.info("Fotos listadas com sucesso!");
-            return response.success(res, "Fotografias recuperadas com sucesso!", fotos);
+            return resposta.success(res, "Fotografias recuperadas com sucesso!", fotos);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisFotosController -> buscarTodasFotosPorLocal()");
-            return response.error(res, "Erro ao listar as fotografias do local.");
+            return resposta.error(res, "Erro ao listar as fotografias do local.");
         }
     }
 
@@ -62,14 +62,14 @@ class LocaisFotosController {
         const arquivo = req.file;
 
         if (!arquivo) {
-            return response.error(res, "Nenhum ficheiro de imagem foi fornecido.");
+            return resposta.error(res, "Nenhum ficheiro de imagem foi fornecido.");
         }
 
         if (!id_local || !tipo_foto) {
             if (fs.existsSync(arquivo.path)) {
                 fs.unlinkSync(arquivo.path);
             }
-            return response.error(res, "Os campos 'id_local' e 'tipo_foto' são obrigatórios.");
+            return resposta.error(res, "Os campos 'id_local' e 'tipo_foto' são obrigatórios.");
         }
 
         try {
@@ -88,7 +88,7 @@ class LocaisFotosController {
             });
 
             logger.info("Foto criada com sucesso!");
-            return response.created(res, "Fotografia registada com sucesso!", resultado);
+            return resposta.created(res, "Fotografia registada com sucesso!", resultado);
         } catch (error) {
             if (fs.existsSync(arquivo.path)) {
                 fs.unlinkSync(arquivo.path);
@@ -97,10 +97,10 @@ class LocaisFotosController {
             logger.error({ err: error }, "Erro ao executar: LocaisFotosController -> criarFoto()");
 
             if (error.code === 'P2003') {
-                return response.error(res, "O 'id_local' informado não existe no sistema.");
+                return resposta.error(res, "O 'id_local' informado não existe no sistema.");
             }
 
-            return response.error(res, "Falha ao registar a fotografia. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao registar a fotografia. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -110,7 +110,7 @@ class LocaisFotosController {
         const id = Number(id_foto_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -119,7 +119,7 @@ class LocaisFotosController {
             });
 
             if (!fotoExistente) {
-                return response.notFound(res, "Fotografia não localizada para atualização.");
+                return resposta.notFound(res, "Fotografia não localizada para atualização.");
             }
 
             const resultado = await prisma.$transaction(async (tx) => {
@@ -133,10 +133,10 @@ class LocaisFotosController {
             });
 
             logger.info("Foto atualizada com sucesso!");
-            return response.created(res, "Fotografia atualizada com sucesso!", resultado);
+            return resposta.created(res, "Fotografia atualizada com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisFotosController -> atualizarFoto()");
-            return response.error(res, "Falha ao atualizar o registo da fotografia.");
+            return resposta.error(res, "Falha ao atualizar o registo da fotografia.");
         }
     }
 
@@ -145,7 +145,7 @@ class LocaisFotosController {
         const id = Number(id_foto_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -154,7 +154,7 @@ class LocaisFotosController {
             });
 
             if (!fotoExistente) {
-                return response.notFound(res, "Fotografia não encontrada para exclusão.");
+                return resposta.notFound(res, "Fotografia não encontrada para exclusão.");
             }
 
             await prisma.$transaction(async (tx) => {
@@ -178,10 +178,10 @@ class LocaisFotosController {
             }
 
             logger.info("Foto excluída com sucesso!");
-            return response.success(res, "Fotografia removida com sucesso!");
+            return resposta.success(res, "Fotografia removida com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisFotosController -> excluirFoto()");
-            return response.serverError(res, "Erro ao eliminar a fotografia solicitada.");
+            return resposta.serverError(res, "Erro ao eliminar a fotografia solicitada.");
         }
     }
 }

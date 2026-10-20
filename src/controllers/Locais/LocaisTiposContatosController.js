@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class LocaisTiposContatosController {
     async buscarTipoContato(req, res) {
@@ -8,7 +8,7 @@ class LocaisTiposContatosController {
         const id = Number(id_tipo_contato_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -17,14 +17,14 @@ class LocaisTiposContatosController {
             });
 
             if (!tipoContato) {
-                return response.notFound(res, "Tipo de contacto não encontrado.");
+                return resposta.notFound(res, "Tipo de contacto não encontrado.");
             }
 
             logger.info("Tipo de contacto retornado com sucesso!");
-            return response.success(res, "Tipo de contacto encontrado com sucesso!", tipoContato);
+            return resposta.success(res, "Tipo de contacto encontrado com sucesso!", tipoContato);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisTiposContatosController -> buscarTipoContato()");
-            return response.error(res, "Erro ao procurar o tipo de contacto.");
+            return resposta.error(res, "Erro ao procurar o tipo de contacto.");
         }
     }
 
@@ -33,14 +33,14 @@ class LocaisTiposContatosController {
             const tipos = await prisma.localTipoContato.findMany();
 
             if (!tipos || tipos.length === 0) {
-                return response.notFound(res, "Nenhum tipo de contacto encontrado.");
+                return resposta.notFound(res, "Nenhum tipo de contacto encontrado.");
             }
 
             logger.info("Tipos de contacto listados com sucesso!");
-            return response.success(res, "Tipos de contacto recuperados com sucesso!", tipos);
+            return resposta.success(res, "Tipos de contacto recuperados com sucesso!", tipos);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisTiposContatosController -> buscarTodosTiposContatos()");
-            return response.error(res, "Erro ao listar os tipos de contacto.");
+            return resposta.error(res, "Erro ao listar os tipos de contacto.");
         }
     }
 
@@ -48,7 +48,7 @@ class LocaisTiposContatosController {
         const { tipo } = req.body;
 
         if (!tipo) {
-            return response.error(res, "O tipo do contato é obrigatório.");
+            return resposta.error(res, "O tipo do contato é obrigatório.");
         }
 
         try {
@@ -62,10 +62,10 @@ class LocaisTiposContatosController {
             });
 
             logger.info("Tipo de contacto criado com sucesso!");
-            return response.created(res, "Tipo de contacto criado com sucesso!", resultado);
+            return resposta.created(res, "Tipo de contacto criado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisTiposContatosController -> criarTipoContato()");
-            return response.error(res, "Falha ao criar o tipo de contacto. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao criar o tipo de contacto. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -75,7 +75,7 @@ class LocaisTiposContatosController {
         const id = Number(id_tipo_contato_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -84,7 +84,7 @@ class LocaisTiposContatosController {
             });
 
             if (!tipoExistente) {
-                return response.notFound(res, "Tipo de contacto não encontrado para atualização.");
+                return resposta.notFound(res, "Tipo de contacto não encontrado para atualização.");
             }
 
             const resultado = await prisma.$transaction(async (tx) => {
@@ -98,10 +98,10 @@ class LocaisTiposContatosController {
             });
 
             logger.info("Tipo de contacto atualizado com sucesso!");
-            return response.created(res, "Tipo de contacto atualizado com sucesso!", resultado);
+            return resposta.created(res, "Tipo de contacto atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisTiposContatosController -> atualizarTipoContato()");
-            return response.error(res, "Falha ao atualizar o tipo de contacto. Nenhuma alteração foi gravada.");
+            return resposta.error(res, "Falha ao atualizar o tipo de contacto. Nenhuma alteração foi gravada.");
         }
     }
 
@@ -110,7 +110,7 @@ class LocaisTiposContatosController {
         const id = Number(id_tipo_contato_local);
 
         if (isNaN(id)) {
-            return response.error(res, "O identificador informado deve ser um número válido.");
+            return resposta.error(res, "O identificador informado deve ser um número válido.");
         }
 
         try {
@@ -119,7 +119,7 @@ class LocaisTiposContatosController {
             });
 
             if (!tipoExistente) {
-                return response.notFound(res, "Tipo de contacto não encontrado para exclusão.");
+                return resposta.notFound(res, "Tipo de contacto não encontrado para exclusão.");
             }
 
             await prisma.$transaction(async (tx) => {
@@ -129,10 +129,10 @@ class LocaisTiposContatosController {
             });
 
             logger.info("Tipo de contacto excluído com sucesso!");
-            return response.success(res, "Tipo de contacto removido com sucesso!");
+            return resposta.success(res, "Tipo de contacto removido com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: LocaisTiposContatosController -> excluirTipoContato()");
-            return response.serverError(res, "Erro ao eliminar o tipo de contacto solicitado.");
+            return resposta.serverError(res, "Erro ao eliminar o tipo de contacto solicitado.");
         }
     }
 }

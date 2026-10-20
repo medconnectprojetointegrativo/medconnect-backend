@@ -9,13 +9,13 @@ class LocaisRota {
     }
 
     controllers() {
-        this.locaisController = require('../controllers/LocaisController');
-        this.locaisEnderecosController = require('../controllers/LocaisEnderecosController');
-        this.locaisCategoriasController = require("../controllers/LocaisCategoriasController");
-        this.locaisTiposContatosController = require("../controllers/LocaisTiposContatosController");
-        this.locaisContatosController = require("../controllers/LocaisContatosController");
-        this.locaisAvaliacoesController = require("../controllers/LocaisAvaliacoesController");
-        this.locaisFotosController = require("../controllers/LocaisFotosController")
+        this.locaisController = require('../controllers/Locais/LocaisController');
+        this.locaisEnderecosController = require('../controllers/Locais/LocaisEnderecosController');
+        this.locaisCategoriasController = require("../controllers/Locais/LocaisCategoriasController");
+        this.locaisTiposContatosController = require("../controllers/Locais/LocaisTiposContatosController");
+        this.locaisContatosController = require("../controllers/Locais/LocaisContatosController");
+        this.locaisAvaliacoesController = require("../controllers/Locais/LocaisAvaliacoesController");
+        this.locaisFotosController = require("../controllers/Locais/LocaisFotosController")
     }
 
     routes() {
