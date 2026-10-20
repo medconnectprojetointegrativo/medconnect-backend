@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient'); //[cite: 4]
-const logger = require('../utils/logger'); //[cite: 4]
-const response = require('../utils/response'); //[cite: 4]
+const prisma = require('../../config/prismaClient'); //[cite: 4]
+const logger = require('../../utils/logger'); //[cite: 4]
+const resposta = require('../../utils/resposta'); //[cite: 4]
 
 class PacientesDocumentosController {
     async criarDocumento(req, res) {
@@ -23,11 +23,11 @@ class PacientesDocumentosController {
             });
             logger.info("Documento criado com sucesso!");
 
-            return response.created(res, "Documento criado com sucesso!", resultado);
+            return resposta.created(res, "Documento criado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacientesDocumentosController -> criarDocumento()");
 
-            return response.error(res, "Falha ao criar o documento.");
+            return resposta.error(res, "Falha ao criar o documento.");
         }
     }
 
@@ -52,11 +52,11 @@ class PacientesDocumentosController {
 
             logger.info("Documento atualizado com sucesso!");
 
-            return response.created(res, "Documento atualizado com sucesso!", resultado);
+            return resposta.created(res, "Documento atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacientesDocumentosController -> atualizarDocumento()");
 
-            return response.error(res, "Falha ao atualizar o documento.");
+            return resposta.error(res, "Falha ao atualizar o documento.");
         }
     }
 
@@ -69,11 +69,11 @@ class PacientesDocumentosController {
             });
             logger.info("Documento excluído com sucesso!");
 
-            return response.success(res, "Documento excluído com sucesso!");
+            return resposta.success(res, "Documento excluído com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacientesDocumentosController -> excluirDocumento()");
 
-            return response.serverError(res, "Falha ao excluir o documento.");
+            return resposta.serverError(res, "Falha ao excluir o documento.");
         }
     }
 }

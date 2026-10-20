@@ -1,5 +1,10 @@
+/* 
+    logger.js
+    Configuração do registrador de eventos (logger).
+*/
 const { loadEnvFile } = require('node:process');
 loadEnvFile();
+
 const pino = require('pino');
 
 const ambienteDesenvolvimento = process.env.AMBIENTE !== 'PRODUÇÃO';
@@ -12,7 +17,7 @@ const logger = pino({
             options: {
                 colorize: true,
                 translateTime: 'SYS:dd/mm/yyyy HH:MM:ss',
-                ignore: 'pid,hostname', // Oculta dados irrelevantes no terminal
+                ignore: 'pid,hostname',
             },
         },
     }),

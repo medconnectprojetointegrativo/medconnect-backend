@@ -9,8 +9,8 @@ class PacientesRota {
     }
 
     controllers() {
-        this.conveniosController = require('../controllers/ConveniosController');
-        this.conveniosPlanosController = require('../controllers/ConveniosPlanosController');
+        this.conveniosController = require('../controllers/Convenios/ConveniosController');
+        this.conveniosPlanosController = require('../controllers/Convenios/ConveniosPlanosController');
     }
 
     routes() {

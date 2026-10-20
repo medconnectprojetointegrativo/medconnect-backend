@@ -4,8 +4,9 @@ loadEnvFile();
 const app = require('./src/app.js');
 const logger = require('./src/utils/logger.js');
 const prisma = require('./src/config/prismaClient.js');
+const inicializarPastasArmazenamento = require("./src/utils/inicializarArmazenamento.js");
 
-async function startServer() {
+async function iniciarServidor() {
     try {
         logger.info("MedConnect - Back-End");
 
@@ -15,13 +16,15 @@ async function startServer() {
 
         logger.info("Prisma conectado ao banco de dados com sucesso!");
 
-        const port = process.env.BACKEND_PORT || 3000;
+        inicializarPastasArmazenamento();
 
-        app.listen(port, () => {
-            logger.info(`Servidor online! Back-end disponível na porta: ${port}`);
+        const porta = process.env.PORTA_BACKEND || 3000;
+
+        app.listen(porta, () => {
+            logger.info(`Servidor online! Back-end disponível na porta: ${porta}`);
 
             if (process.env.AMBIENTE === "DESENVOLVIMENTO") {
-                logger.info(`Documentação da API disponível em: http://localhost:${port}/api/docs`);
+                logger.info(`Documentação da API disponível em: http://localhost:${porta}/api/docs`);
             }
         });
 
@@ -40,4 +43,4 @@ async function startServer() {
     }
 }
 
-startServer();
+iniciarServidor();

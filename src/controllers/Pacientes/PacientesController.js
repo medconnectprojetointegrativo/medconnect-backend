@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class PacientesController {
     async buscarPaciente(req, res) {
@@ -16,15 +16,15 @@ class PacientesController {
                     procedimentos: true
                 }
             });
-            if (!paciente) return response.notFound(res, "Paciente não encontrado.");
+            if (!paciente) return resposta.notFound(res, "Paciente não encontrado.");
 
             logger.info("Paciente retornado com sucesso!");
 
-            return response.success(res, "Paciente encontrado com sucesso!", paciente);
+            return resposta.success(res, "Paciente encontrado com sucesso!", paciente);
         } catch (err) {
             logger.error({ err }, "Erro ao executar: PacientesController -> buscarPaciente()");
 
-            return response.error(res, "Erro ao buscar o paciente solicitado.");
+            return resposta.error(res, "Erro ao buscar o paciente solicitado.");
         }
     }
 
@@ -33,15 +33,15 @@ class PacientesController {
             const pacientes = await prisma.paciente.findMany({
                 include: { documentos: true, conveniosUso: true }
             });
-            if (!pacientes || pacientes.length === 0) return response.notFound(res, "Pacientes não encontrados.");
+            if (!pacientes || pacientes.length === 0) return resposta.notFound(res, "Pacientes não encontrados.");
 
             logger.info("Pacientes retornados com sucesso!");
 
-            return response.success(res, "Pacientes encontrados com sucesso!", pacientes);
+            return resposta.success(res, "Pacientes encontrados com sucesso!", pacientes);
         } catch (err) {
             logger.error({ err }, "Erro ao executar: PacientesController -> buscarTodosPacientes()");
 
-            return response.error(res, "Erro ao buscar os pacientes solicitados.");
+            return resposta.error(res, "Erro ao buscar os pacientes solicitados.");
         }
     }
 
@@ -65,11 +65,11 @@ class PacientesController {
 
             logger.info("Paciente criado com sucesso!");
 
-            return response.created(res, "Paciente criado com sucesso!", resultado);
+            return resposta.created(res, "Paciente criado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacientesController -> criarPaciente()");
 
-            return response.error(res, "Falha ao criar o paciente. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao criar o paciente. Nenhuma alteração foi salva.");
         }
     }
 
@@ -93,11 +93,11 @@ class PacientesController {
 
             logger.info("Paciente atualizado com sucesso!");
 
-            return response.created(res, "Paciente atualizado com sucesso!", resultado);
+            return resposta.created(res, "Paciente atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacientesController -> atualizarPaciente()");
 
-            return response.error(res, "Falha ao atualizar o paciente. Nenhuma alteração foi salva.");
+            return resposta.error(res, "Falha ao atualizar o paciente. Nenhuma alteração foi salva.");
         }
     }
 
@@ -107,7 +107,7 @@ class PacientesController {
         try {
             const paciente = await prisma.paciente.findUnique({ where: { id_paciente: Number(id_paciente) } });
 
-            if (!paciente) return response.notFound(res, "Paciente não encontrado.");
+            if (!paciente) return resposta.notFound(res, "Paciente não encontrado.");
 
             await prisma.$transaction(async (tx) => {
                 await tx.paciente.delete({ where: { id_paciente: Number(id_paciente) } });
@@ -115,11 +115,11 @@ class PacientesController {
 
             logger.info("Paciente excluído com sucesso!");
 
-            return response.success(res, "Paciente e dependências excluídos com sucesso!");
+            return resposta.success(res, "Paciente e dependências excluídos com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacientesController -> excluirPaciente()");
 
-            return response.serverError(res, "Falha ao excluir o paciente.");
+            return resposta.serverError(res, "Falha ao excluir o paciente.");
         }
     }
 }

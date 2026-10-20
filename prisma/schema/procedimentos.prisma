@@ -1,7 +1,6 @@
 model ProcedimentoTipo {
-  id_tipo_procedimento Int      @id @default(autoincrement())
-  nome_procedimento    String?  @db.VarChar(200)
-
+  id_tipo_procedimento Int                        @id @default(autoincrement())
+  nome_procedimento    String?                    @db.VarChar(200)
   procedimentos        Procedimento[]
   documentacoes        ProcedimentoDocumentacao[]
 
@@ -9,26 +8,24 @@ model ProcedimentoTipo {
 }
 
 model Procedimento {
-  id_procedimento      Int       @id @default(autoincrement())
+  id_procedimento      Int                        @id @default(autoincrement())
   id_profissional      Int?
   id_paciente          Int?
   id_local             Int?
   id_tipo_procedimento Int?
-  situacao             String?   @db.VarChar(20)
-  data_hora_marcado    DateTime? @db.Timestamp()
-  estimativa_duracao   DateTime? @db.Time()
-  data_hora_finalizado DateTime? @db.Timestamp()
-
-  profissional         Profissional?     @relation(fields: [id_profissional], references: [id_profissional])
-  paciente             Paciente?         @relation(fields: [id_paciente], references: [id_paciente])
-  local                Local?            @relation(fields: [id_local], references: [id_local])
-  tipo_procedimento    ProcedimentoTipo? @relation(fields: [id_tipo_procedimento], references: [id_tipo_procedimento])
-  
+  situacao             String?                    @db.VarChar(20)
+  data_hora_marcado    DateTime?                  @db.Timestamp(6)
+  estimativa_duracao   DateTime?                  @db.Time(6)
+  data_hora_finalizado DateTime?                  @db.Timestamp(6)
+  local                Local?                     @relation(fields: [id_local], references: [id_local])
+  paciente             Paciente?                  @relation(fields: [id_paciente], references: [id_paciente])
+  profissional         Profissional?              @relation(fields: [id_profissional], references: [id_profissional])
+  tipo_procedimento    ProcedimentoTipo?          @relation(fields: [id_tipo_procedimento], references: [id_tipo_procedimento])
   documentacoes        ProcedimentoDocumentacao[]
   pagamentos           ProcedimentoPagamento[]
 
-  @@map("procedimentos")
   @@index([data_hora_marcado])
+  @@map("procedimentos")
 }
 
 model ProcedimentoTipoDocumento {
@@ -45,8 +42,7 @@ model ProcedimentoDocumentacao {
   nome_arquivo_original     String?           @db.VarChar(100)
   nome_arquivo_padronizado  String?           @db.VarChar(200)
   caminho_arquivo           String?           @db.VarChar(200)
-  data_hora_entrega         DateTime?         @db.Timestamp()
-
+  data_hora_entrega         DateTime?         @db.Timestamp(6)
   procedimento              Procedimento?     @relation(fields: [id_procedimento], references: [id_procedimento])
   tipo_procedimento         ProcedimentoTipo? @relation(fields: [id_tipo_procedimento], references: [id_tipo_procedimento])
 
@@ -59,10 +55,9 @@ model ProcedimentoPagamento {
   id_paciente_convenio Int?
   valor                Decimal?          @db.Decimal(10, 2)
   metodo_pagamento     String?           @db.VarChar(20)
-  data_hora_pagamento  DateTime?         @db.Timestamp()
-
-  procedimento         Procedimento?     @relation(fields: [id_procedimento], references: [id_procedimento])
+  data_hora_pagamento  DateTime?         @db.Timestamp(6)
   convenio             PacienteConvenio? @relation(fields: [id_paciente_convenio], references: [id_convenio_paciente])
+  procedimento         Procedimento?     @relation(fields: [id_procedimento], references: [id_procedimento])
 
   @@map("procedimentos_pagamentos")
 }

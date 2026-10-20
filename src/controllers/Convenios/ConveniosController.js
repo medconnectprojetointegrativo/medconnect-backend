@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class ConveniosController {
     async criarConvenio(req, res) {
@@ -14,11 +14,11 @@ class ConveniosController {
             });
             logger.info("Convênio criado com sucesso!");
 
-            return response.created(res, "Convênio criado com sucesso!", resultado);
+            return resposta.created(res, "Convênio criado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: ConveniosController -> criarConvenio()");
 
-            return response.error(res, "Falha ao criar o convênio.");
+            return resposta.error(res, "Falha ao criar o convênio.");
         }
     }
 
@@ -37,11 +37,11 @@ class ConveniosController {
             });
             logger.info("Convênio atualizado com sucesso!");
 
-            return response.created(res, "Convênio atualizado com sucesso!", resultado);
+            return resposta.created(res, "Convênio atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: ConveniosController -> atualizarConvenio()");
 
-            return response.error(res, "Falha ao atualizar o convênio.");
+            return resposta.error(res, "Falha ao atualizar o convênio.");
         }
     }
 }

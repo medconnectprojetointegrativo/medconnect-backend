@@ -1,7 +1,7 @@
 const logger = require('./logger');
 const bcrypt = require('bcryptjs');
 
-async function hashPassword(plainTextPassword) {
+async function criptografarSenha(plainTextPassword) {
     const saltRounds = 10;
 
     try {
@@ -12,7 +12,7 @@ async function hashPassword(plainTextPassword) {
     }
 }
 
-async function verifyPassword(plainTextPassword, hashedPasswordFromDb) {
+async function verificarSenha(plainTextPassword, hashedPasswordFromDb) {
     try {
         const isMatch = await bcrypt.compare(plainTextPassword, hashedPasswordFromDb);
         return isMatch;
@@ -22,6 +22,6 @@ async function verifyPassword(plainTextPassword, hashedPasswordFromDb) {
 }
 
 module.exports = {
-    hashPassword,
-    verifyPassword
+    criptografarSenha,
+    verificarSenha
 }

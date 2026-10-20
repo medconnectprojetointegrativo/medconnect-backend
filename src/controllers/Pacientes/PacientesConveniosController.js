@@ -1,6 +1,6 @@
-const prisma = require('../config/prismaClient');
-const logger = require('../utils/logger');
-const response = require('../utils/response');
+const prisma = require('../../config/prismaClient');
+const logger = require('../../utils/logger');
+const resposta = require('../../utils/resposta');
 
 class PacientesConveniosController {
     async vincularConvenio(req, res) {
@@ -21,11 +21,11 @@ class PacientesConveniosController {
                 return { vinculo: novoVinculo };
             });
             logger.info("Vínculo com convênio criado com sucesso!");
-            return response.created(res, "Vínculo criado com sucesso!", resultado);
+            return resposta.created(res, "Vínculo criado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacienteConveniosController -> vincularConvenio()");
 
-            return response.error(res, "Falha ao criar vínculo com convênio.");
+            return resposta.error(res, "Falha ao criar vínculo com convênio.");
         }
     }
 
@@ -47,11 +47,11 @@ class PacientesConveniosController {
             });
             logger.info("Vínculo atualizado com sucesso!");
 
-            return response.created(res, "Vínculo atualizado com sucesso!", resultado);
+            return resposta.created(res, "Vínculo atualizado com sucesso!", resultado);
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacienteConveniosController -> atualizarVinculo()");
 
-            return response.error(res, "Falha ao atualizar o vínculo.");
+            return resposta.error(res, "Falha ao atualizar o vínculo.");
         }
     }
 
@@ -63,11 +63,11 @@ class PacientesConveniosController {
             });
             logger.info("Vínculo excluído com sucesso!");
 
-            return response.success(res, "Vínculo excluído com sucesso!");
+            return resposta.success(res, "Vínculo excluído com sucesso!");
         } catch (error) {
             logger.error({ err: error }, "Erro ao executar: PacienteConveniosController -> excluirVinculo()");
 
-            return response.serverError(res, "Falha ao deletar o vínculo.");
+            return resposta.serverError(res, "Falha ao deletar o vínculo.");
         }
     }
 }

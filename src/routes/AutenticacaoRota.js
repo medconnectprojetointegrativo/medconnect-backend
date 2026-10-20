@@ -9,7 +9,7 @@ class AutenticacaoRota {
     }
 
     controllers() {
-        this.autenticacaoController = require('../controllers/AutenticacaoController');
+        this.autenticacaoController = require('../controllers/Usuarios/AutenticacaoController');
     }
 
     routes() {
@@ -24,6 +24,7 @@ class AutenticacaoRota {
     // Rota padrão: /api/autenticacao
     autenticacaoRota() {
         this.router.post('/login', this.autenticacaoController.login);
+        this.router.post('/validar-token', this.autenticacaoController.validarToken);
     }
 }
 
